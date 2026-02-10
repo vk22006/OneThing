@@ -7,6 +7,7 @@
 ## Why OneThing?
 
 I struggled with:
+
 - Starting multiple projects but not finishing them
 - Context switching between tools (Notion, notes, TODO apps)
 - Losing track of progress over time
@@ -34,10 +35,12 @@ No cloud. No accounts. No distractions.
 ## Tech Stack
 
 ### Current
+
 - **Frontend:** Svelte
 - **Language:** JavaScript / HTML / CSS
 
 ### Possible Additions
+
 - **Desktop wrapper:** Tauri (Rust)  
   - For native desktop builds
   - Local file storage
@@ -52,6 +55,7 @@ No cloud. No accounts. No distractions.
 🚧 **Active development**
 
 This project is being built incrementally with a strong focus on:
+
 - shipping small, usable versions
 - avoiding feature creep
 - maintaining a clean architecture
