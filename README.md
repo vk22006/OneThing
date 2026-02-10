@@ -1,42 +1,104 @@
-# sv
+# OneThing
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+> A focused productivity app built to help me finish what I start.
 
-## Creating a project
+---
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Why OneThing?
 
-```sh
-# create a new project
-npx sv create my-app
-```
+I struggled with:
+- Starting multiple projects but not finishing them
+- Context switching between tools (Notion, notes, TODO apps)
+- Losing track of progress over time
 
-To recreate this project with the same configuration:
+**OneThing** exists to solve a single problem:  
+👉 **focus on one project at a time and make visible progress every day.**
 
-```sh
-# recreate this project
-npx sv create --template minimal --types jsdoc --add prettier tailwindcss="plugins:typography,forms" --install npm OneThing
-```
+This is a personal tool first — built to match my workflow — and a learning project second.
 
-## Developing
+---
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Core Features (Planned)
 
-```sh
-npm run dev
+- ✅ Project-based TODO list  
+- 📅 Deadlines per project  
+- 🧠 Project ideas + tool notes  
+- 📝 Daily progress logging  
+- 🔔 Optional daily reminder notification  
+- 📊 Simple progress visibility over time  
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+No cloud. No accounts. No distractions.
 
-## Building
+---
 
-To create a production version of your app:
+## Tech Stack
 
-```sh
-npm run build
-```
+### Current
+- **Frontend:** Svelte
+- **Language:** JavaScript / HTML / CSS
 
-You can preview the production build with `npm run preview`.
+### Possible Additions
+- **Desktop wrapper:** Tauri (Rust)  
+  - For native desktop builds
+  - Local file storage
+  - System notifications
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+> The app is intentionally built as a web-first application so it can evolve into a desktop app without a rewrite.
+
+---
+
+## Project Status
+
+🚧 **Active development**
+
+This project is being built incrementally with a strong focus on:
+- shipping small, usable versions
+- avoiding feature creep
+- maintaining a clean architecture
+
+---
+
+## Roadmap (High-Level)
+
+- [ ] Core project + TODO workflow
+- [ ] Local persistence
+- [ ] Progress logging
+- [ ] Deadline tracking
+- [ ] Desktop notifications (if Tauri is added)
+- [ ] Polishing + stability
+
+Detailed roadmap lives outside this README to keep this file concise.
+
+---
+
+## Design Philosophy
+
+- One primary project at a time
+- Minimal UI, maximum clarity
+- Offline-first
+- Local data ownership
+- Built for long-term personal use, not virality
+
+---
+
+## What This Project Demonstrates
+
+- Ability to design software around real personal problems
+- Incremental development and scope control
+- Frontend state management
+- (Optional) Desktop app architecture with web + native integration
+
+---
+
+## Future Improvements
+
+- SQLite-based storage
+- Export logs as Markdown
+- Keyboard-first workflow
+- Cross-platform desktop builds
+
+---
+
+## License
+
+MIT
