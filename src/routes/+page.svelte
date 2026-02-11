@@ -53,9 +53,9 @@
 
   <Sidebar title="OneThing">
     <button class="block hover:bg-gray-700 p-2 rounded"><a href="/">Tasks</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/ProjectInfo">Project Info</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Progress">Progress</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded">Settings</button>
+    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/ProjectInfo">Project Info</a></button>
+    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/Progress">Progress</a></button>
+    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/Settings">Settings</a></button>
   </Sidebar>
 
   <main class="flex-1 p-6">
