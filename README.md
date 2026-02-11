@@ -4,6 +4,8 @@
 
 ---
 
+![Main screen (initial version)](assets/main_page_temp.png)
+
 ## Why OneThing?
 
 I struggled with:
