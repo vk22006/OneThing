@@ -6,18 +6,18 @@
 
     let page = $state('Project List');
 
-    type Status = 'TODO' | 'DONE';
 
     type User = {
         id: number;
-        task: string;
-        status: Status;
+        project: string;
+        deadline: string;
     };
     let users = $state<User[]>([]);
-    let newTask = $state("");
+    let newProject = $state("");
+    let newDeadline = $state("");
 
     onMount(() => {
-        const stored = localStorage.getItem("tasks");
+        const stored = localStorage.getItem("project_info");
 
         if (stored) {
         users.push(...JSON.parse(stored));
@@ -25,26 +25,20 @@
     });
 
     $effect(() => {
-        localStorage.setItem("tasks", JSON.stringify(users));
+        localStorage.setItem("project_info", JSON.stringify(users));
     });
 
-    function addTask(task: string) {
-        if (!task.trim()) return;
+    function addProjDetails(project: string, deadline: string) {
+        if (!project.trim()) return;
 
         users.push({
             id: Date.now(),
-            task,
-            status: "TODO"
+            project,
+            deadline
         });
 
-        newTask = "";
-    }
-
-    function toggle(id: number) {
-        const user = users.find(u => u.id === id);
-        if (user) {
-            user.status = user.status === "TODO" ? "DONE" : "TODO";
-        }
+        newProject = "";
+        newDeadline = "";
     }
 
 </script>
@@ -61,7 +55,49 @@
   <main class="flex-1 p-6">
     
     <Header {page} />
-    
+    <div class="flex justify-center items-center gap-3 mt-4 p-5">
+
+    <input
+        bind:value={newProject}
+        placeholder="Project Details"
+        class="w-full max-w-md p-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400"
+    />
+    <input
+        bind:value={newDeadline}
+        placeholder="Deadline"
+        class="w-full max-w-md p-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400"
+    />
+
+    <button
+        onclick={() => addProjDetails(newProject,newDeadline)}
+        class="p-2 px-4 bg-cyan-500 hover:bg-cyan-700 rounded-lg text-white"
+    >
+        Add Project info
+    </button>
+
+
+    </div>
+
+
+    <!-- TODO list -->
+    <table class="m-4 p-4 table-auto w-xl">
+    <thead>
+    <tr>
+        <th class="p-2 border border-gray-300">S.no</th>
+        <th class="p-2 border border-gray-300">Project</th>
+        <th class="p-2 border border-gray-300">Deadline</th>
+    </tr>
+    </thead>
+    <tbody>
+        {#each users as user,index (user.id)}
+        <tr in:fly={{ y: 20, duration: 250 }} out:fade>
+            <td class="p-2 border border-gray-300">{index +1}</td>
+            <td class="p-2 border border-gray-300">{user.project}</td>
+            <td class="p-2 border border-gray-300">{user.deadline}</td>
+        </tr>
+        {/each}
+    </tbody>
+    </table>
 
     </main>
 
