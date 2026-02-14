@@ -21,11 +21,6 @@
         tasks: Task[];
     };
 
-    // type User = {
-    //     id: number;
-    //     project: string;
-    //     deadline: string;
-    // };
     let projects = $state<Project[]>([]);
     let newProject = $state("");
     let newDeadline = $state("");
@@ -94,6 +89,17 @@
     }
 
 
+    function projectProgress(project: Project) {
+        if (project.tasks.length === 0) return 0;
+
+        const done = project.tasks.filter(
+            t => t.status === "DONE"
+        ).length;
+
+        return Math.round((done / project.tasks.length) * 100);
+    }
+
+
 
 </script>
 
@@ -150,6 +156,7 @@
                     Delete Project
                 </button>
             </div>
+            
         </div>
 
         <!-- Add task -->
@@ -166,6 +173,18 @@
                 }
             }}
         />
+        {#each projects as project}
+        <div>
+            <h3>{project.title}</h3>
+            <progress
+                max="100"
+                value={projectProgress(project)}>
+            </progress>
+
+            <span>{projectProgress(project)}%</span>
+        </div>
+        {/each}
+
 
 
         <!-- Tasks Table -->
