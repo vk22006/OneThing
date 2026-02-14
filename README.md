@@ -7,7 +7,7 @@
 
 ---
 
-![Main screen (initial version)](assets/main_page_temp.png)
+![Main screen (initial version)](assets/main_page_initial.gif)
 
 ## Why OneThing?
 
