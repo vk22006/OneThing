@@ -69,7 +69,7 @@ This project is being built incrementally with a strong focus on:
 
 ## Roadmap (High-Level)
 
-- [ ] Core project + TODO workflow
+- [-] Core project + Daily TODO workflow
 - [ ] Local persistence
 - [ ] Progress logging
 - [ ] Deadline tracking
