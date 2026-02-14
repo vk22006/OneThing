@@ -104,6 +104,8 @@
         <p>{overallProgress}% completed</p>
     </div>
 
+    <h1>Project wise progress</h1>
+
     {#each projects as project}
 
     {@const done =
