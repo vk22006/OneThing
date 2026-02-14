@@ -4,48 +4,33 @@
     import { fly, fade } from "svelte/transition";
     import { onMount } from "svelte";
 
-    let page = $state('Project Progress');
+    let page = $state('Progress Dashboard');
 
     type Status = 'TODO' | 'DONE';
 
-    type User = {
+    type Task = {
         id: number;
         task: string;
         status: Status;
     };
-    let users = $state<User[]>([]);
-    let newTask = $state("");
+
+    type Project = {
+        id: number;
+        title: string;
+        deadline: string;
+        tasks: Task[];
+    };
+
+    let projects: Project[] = [];
 
     onMount(() => {
-        const stored = localStorage.getItem("tasks");
+        const stored = localStorage.getItem("project_info");
 
         if (stored) {
-        users.push(...JSON.parse(stored));
+            projects = JSON.parse(stored);
         }
     });
 
-    $effect(() => {
-        localStorage.setItem("tasks", JSON.stringify(users));
-    });
-
-    function addTask(task: string) {
-        if (!task.trim()) return;
-
-        users.push({
-            id: Date.now(),
-            task,
-            status: "TODO"
-        });
-
-        newTask = "";
-    }
-
-    function toggle(id: number) {
-        const user = users.find(u => u.id === id);
-        if (user) {
-            user.status = user.status === "TODO" ? "DONE" : "TODO";
-        }
-    }
 
 </script>
 
