@@ -139,8 +139,18 @@
     <div class="m-6 p-4 border rounded-lg">
 
         <!-- Project Info -->
-        <h2 class="text-xl font-bold">{project.title}</h2>
-        <p class="mb-3">Deadline: {project.deadline}</p>
+        <div class="flex justify-between">
+            <div>
+                <h2 class="text-xl font-bold">{project.title}</h2>
+                <p class="mb-3">Deadline: {project.deadline}</p>
+            </div>
+
+            <div>
+                <button onclick={()=>removeProject(project.id)} class="p-2 px-4 bg-red-500 hover:bg-red-700 rounded-full">
+                    Delete Project
+                </button>
+            </div>
+        </div>
 
         <!-- Add task -->
         <input
@@ -156,6 +166,7 @@
                 }
             }}
         />
+
 
         <!-- Tasks Table -->
         <table class="table-auto w-full border">
