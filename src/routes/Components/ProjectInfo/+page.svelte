@@ -133,8 +133,6 @@
         class="p-2 px-4 bg-cyan-500 hover:bg-cyan-700 rounded-lg text-white">
         Add Project info
     </button>
-
-
     </div>
 
 
@@ -173,7 +171,8 @@
                 }
             }}
         />
-        {#each projects as project}
+
+        <!-- Progress bar -->
         <div>
             <h3>{project.title}</h3>
             <progress
@@ -183,9 +182,7 @@
 
             <span>{projectProgress(project)}%</span>
         </div>
-        {/each}
-
-
+        
 
         <!-- Tasks Table -->
         <table class="table-auto w-full border">
