@@ -84,8 +84,7 @@
 
     <button
         onclick={() => addTask(newTask)}
-        class="p-2 px-4 bg-cyan-500 hover:bg-cyan-700 rounded-lg text-white"
-    >
+        class="p-2 px-4 bg-cyan-500 hover:bg-cyan-700 rounded-lg text-white">
         Add Task
     </button>
 

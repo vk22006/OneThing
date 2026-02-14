@@ -6,13 +6,27 @@
 
     let page = $state('Project List');
 
+    type Status = 'TODO' | 'DONE';
 
-    type User = {
+    type Task = {
         id: number;
-        project: string;
-        deadline: string;
+        task: string;
+        status: Status;
     };
-    let users = $state<User[]>([]);
+
+    type Project = {
+        id: number;
+        title: string;
+        deadline: string;
+        tasks: Task[];
+    };
+
+    // type User = {
+    //     id: number;
+    //     project: string;
+    //     deadline: string;
+    // };
+    let projects = $state<Project[]>([]);
     let newProject = $state("");
     let newDeadline = $state("");
 
@@ -20,21 +34,22 @@
         const stored = localStorage.getItem("project_info");
 
         if (stored) {
-        users.push(...JSON.parse(stored));
+        projects.push(...JSON.parse(stored));
         }
     });
 
     $effect(() => {
-        localStorage.setItem("project_info", JSON.stringify(users));
+        localStorage.setItem("project_info", JSON.stringify(projects));
     });
 
-    function addProjDetails(project: string, deadline: string) {
-        if (!project.trim()) return;
+    function addProjDetails(title: string, deadline: string) {
+        if (!title.trim()) return;
 
-        users.push({
+        projects.push({
             id: Date.now(),
-            project,
-            deadline
+            title,
+            deadline,
+            tasks: []
         });
 
         newProject = "";
@@ -43,10 +58,10 @@
 
     function removeTask(id: number) {
         if (!confirm("Delete this task?")) return;
-        const index = users.findIndex(u => u.id === id);
+        const index = projects.findIndex(u => u.id === id);
 
         if (index !== -1) {
-            users.splice(index, 1);
+            projects.splice(index, 1);
         }
     }
 
@@ -73,7 +88,7 @@
     />
     <input
         bind:value={newDeadline}
-        placeholder="Deadline"
+        placeholder="Deadline (in DD-MM-YYYY)"
         class="w-full max-w-md p-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400"
     />
 
@@ -98,13 +113,13 @@
     </tr>
     </thead>
     <tbody>
-        {#each users as user,index (user.id)}
+        {#each projects as project_,index (project_.id)}
         <tr in:fly={{ y: 20, duration: 250 }} out:fade>
             <td class="p-2 border border-gray-300">{index +1}</td>
-            <td class="p-2 border border-gray-300">{user.project}</td>
-            <td class="p-2 border border-gray-300">{user.deadline}</td>
+            <td class="p-2 border border-gray-300">{project_.title}</td>
+            <td class="p-2 border border-gray-300">{project_.deadline}</td>
             <td class="p-2 border border-gray-300">
-                <button onclick={() => removeTask(user.id)} 
+                <button onclick={() => removeTask(project_.id)} 
                 class="p-2 bg-red-500 hover:bg-red-700 text-white rounded-full"> Delete </button>
             </td>
         </tr>
