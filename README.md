@@ -1,5 +1,8 @@
 # OneThing
 
+![GitHub top language](https://img.shields.io/github/languages/top/vk22006/OneThing)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 > A focused productivity app built to help me finish what I start.
 
 ---
@@ -107,4 +110,4 @@ Detailed roadmap lives outside this README to keep this file concise.
 
 ## License
 
-MIT
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
