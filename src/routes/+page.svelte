@@ -114,7 +114,7 @@
             </td>
             <td class="p-2 border border-gray-300">
                 <button onclick={() => removeTask(user.id)} 
-                class="p-2 bg-red-500 hover:bg-red-700 text-white rounded-full"> Delete </button>
+                class="p-2 text-red-500 underline"> Delete </button>
             </td>
         </tr>
         {/each}
