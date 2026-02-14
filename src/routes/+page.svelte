@@ -4,7 +4,7 @@
     import { fly, fade } from "svelte/transition";
     import { onMount } from "svelte";
 
-    let page = $state('TODO List');
+    let page = $state('Daily TODO List');
 
     type Status = 'TODO' | 'DONE';
 
