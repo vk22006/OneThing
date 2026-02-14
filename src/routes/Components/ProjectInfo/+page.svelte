@@ -56,14 +56,44 @@
         newDeadline = "";
     }
 
-    function removeTask(id: number) {
-        if (!confirm("Delete this task?")) return;
+    function removeProject(id: number) {
+        if (!confirm("Delete this project?")) return;
         const index = projects.findIndex(u => u.id === id);
 
         if (index !== -1) {
             projects.splice(index, 1);
         }
     }
+
+    function addTask(projectId: number, task: string) {
+        const project = projects.find(p => p.id === projectId);
+        if (!project || !task.trim()) return;
+
+        project.tasks.push({
+            id: Date.now(),
+            task,
+            status: "TODO"
+        });
+    }
+
+    function toggleTask(projectId: number, taskId: number) {
+        const project = projects.find(p => p.id === projectId);
+        const task = project?.tasks.find(t => t.id === taskId);
+
+        if (task) {
+            task.status = task.status === "TODO" ? "DONE" : "TODO";
+        }
+    }
+
+    function deleteTask(projectId: number, taskId: number) {
+        const project = projects.find(p => p.id === projectId);
+        if (!project) return;
+
+        const index = project.tasks.findIndex(t => t.id === taskId);
+        if (index !== -1) project.tasks.splice(index, 1);
+    }
+
+
 
 </script>
 
@@ -102,30 +132,69 @@
     </div>
 
 
-    <!-- TODO list -->
-    <table class="m-4 p-4 table-auto w-xl">
-    <thead>
-    <tr>
-        <th class="p-2 border border-gray-300">S.no</th>
-        <th class="p-2 border border-gray-300">Project</th>
-        <th class="p-2 border border-gray-300">Deadline</th>
-        <th class="p-2 border border-gray-300">Delete</th>
-    </tr>
-    </thead>
-    <tbody>
-        {#each projects as project_,index (project_.id)}
-        <tr in:fly={{ y: 20, duration: 250 }} out:fade>
-            <td class="p-2 border border-gray-300">{index +1}</td>
-            <td class="p-2 border border-gray-300">{project_.title}</td>
-            <td class="p-2 border border-gray-300">{project_.deadline}</td>
-            <td class="p-2 border border-gray-300">
-                <button onclick={() => removeTask(project_.id)} 
-                class="p-2 bg-red-500 hover:bg-red-700 text-white rounded-full"> Delete </button>
-            </td>
-        </tr>
-        {/each}
-    </tbody>
-    </table>
+    <!-- Project list -->
+
+    {#each projects as project (project.id)}
+
+    <div class="m-6 p-4 border rounded-lg">
+
+        <!-- Project Info -->
+        <h2 class="text-xl font-bold">{project.title}</h2>
+        <p class="mb-3">Deadline: {project.deadline}</p>
+
+        <!-- Add task -->
+        <input
+            placeholder="New task"
+            class="border p-2 mb-4"
+            onkeydown={(e)=>{
+                if(e.key==="Enter") {
+                    addTask(
+                        project.id,
+                        (e.target as HTMLInputElement).value
+                    );
+                    (e.target as HTMLInputElement).value = "";
+                }
+            }}
+        />
+
+        <!-- Tasks Table -->
+        <table class="table-auto w-full border">
+            <thead>
+                <tr>
+                    <th class="border p-2">Task</th>
+                    <th class="border p-2">Status</th>
+                    <th class="border p-2">Toggle</th>
+                    <th class="border p-2">Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {#each project.tasks as task (task.id)}
+                <tr>
+                    <td class="border p-2">{task.task}</td>
+                    <td class="border p-2">{task.status}</td>
+
+                    <td class="border p-2">
+                        <button onclick={() =>
+                            toggleTask(project.id, task.id)} class="p-2 px-4 bg-cyan-500 hover:bg-cyan-700 rounded-full text-white">
+                            Toggle
+                        </button>
+                    </td>
+
+                    <td class="border p-2">
+                        <button onclick={() =>
+                            deleteTask(project.id, task.id)} class="text-red-500 underline">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                {/each}
+            </tbody>
+        </table>
+
+    </div>
+
+    {/each}
 
     </main>
 
