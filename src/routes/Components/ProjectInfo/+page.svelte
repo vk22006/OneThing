@@ -41,6 +41,15 @@
         newDeadline = "";
     }
 
+    function removeTask(id: number) {
+        if (!confirm("Delete this task?")) return;
+        const index = users.findIndex(u => u.id === id);
+
+        if (index !== -1) {
+            users.splice(index, 1);
+        }
+    }
+
 </script>
 
 <div class="flex">
@@ -70,8 +79,7 @@
 
     <button
         onclick={() => addProjDetails(newProject,newDeadline)}
-        class="p-2 px-4 bg-cyan-500 hover:bg-cyan-700 rounded-lg text-white"
-    >
+        class="p-2 px-4 bg-cyan-500 hover:bg-cyan-700 rounded-lg text-white">
         Add Project info
     </button>
 
@@ -86,6 +94,7 @@
         <th class="p-2 border border-gray-300">S.no</th>
         <th class="p-2 border border-gray-300">Project</th>
         <th class="p-2 border border-gray-300">Deadline</th>
+        <th class="p-2 border border-gray-300">Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -94,6 +103,10 @@
             <td class="p-2 border border-gray-300">{index +1}</td>
             <td class="p-2 border border-gray-300">{user.project}</td>
             <td class="p-2 border border-gray-300">{user.deadline}</td>
+            <td class="p-2 border border-gray-300">
+                <button onclick={() => removeTask(user.id)} 
+                class="p-2 bg-red-500 hover:bg-red-700 text-white rounded-full"> Delete </button>
+            </td>
         </tr>
         {/each}
     </tbody>
