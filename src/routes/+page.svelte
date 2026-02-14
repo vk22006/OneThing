@@ -47,6 +47,15 @@
         }
     }
 
+    function removeTask(id: number) {
+        if (!confirm("Delete this task?")) return;
+        const index = users.findIndex(u => u.id === id);
+
+        if (index !== -1) {
+            users.splice(index, 1);
+        }
+    }
+
 </script>
 
 <div class="flex">
@@ -91,6 +100,7 @@
         <th class="p-2 border border-gray-300">Task</th>
         <th class="p-2 border border-gray-300">Status</th>
         <th class="p-2 border border-gray-300">Toggle</th>
+        <th class="p-2 border border-gray-300">Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -102,6 +112,8 @@
             <td class="p-2 border border-gray-300 justify-center">
                 <button onclick={() => toggle(user.id)}
             class="p-2 bg-cyan-500 hover:bg-cyan-700 rounded-full justify-center"> Toggle status </button></td>
+            <td class="p-2 border border-gray-300">
+                <button onclick={() => removeTask(user.id)} class="p-2 bg-red-500 hover:bg-red-700 text-white rounded-full"> Delete </button></td>
         </tr>
         {/each}
     </tbody>
