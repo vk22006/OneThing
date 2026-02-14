@@ -1,52 +1,13 @@
 <script lang="ts">
     import Header from '../../Header.svelte';
     import Sidebar from '../../sidebar.svelte';
-    import { fly, fade } from "svelte/transition";
-    import { onMount } from "svelte";
+    import { theme, type Theme } from "$lib/stores/theme";
 
     let page = $state('Settings');
 
-    type Status = 'TODO' | 'DONE';
-
-    type User = {
-        id: number;
-        task: string;
-        status: Status;
-    };
-    let users = $state<User[]>([]);
-    let newTask = $state("");
-
-    onMount(() => {
-        const stored = localStorage.getItem("tasks");
-
-        if (stored) {
-        users.push(...JSON.parse(stored));
-        }
-    });
-
-    $effect(() => {
-        localStorage.setItem("tasks", JSON.stringify(users));
-    });
-
-    function addTask(task: string) {
-        if (!task.trim()) return;
-
-        users.push({
-            id: Date.now(),
-            task,
-            status: "TODO"
-        });
-
-        newTask = "";
+    function setTheme(t: Theme) {
+        theme.set(t);
     }
-
-    function toggle(id: number) {
-        const user = users.find(u => u.id === id);
-        if (user) {
-            user.status = user.status === "TODO" ? "DONE" : "TODO";
-        }
-    }
-
 </script>
 
 <div class="flex">
@@ -62,6 +23,26 @@
     
     <Header {page} />
     
+    <h2 class="text-xl mb-4">Theme Settings</h2>
+
+    <div class="flex gap-4">
+
+    <button
+        onclick={() => setTheme("light")}
+        class="p-3 border rounded"
+        class:selected={$theme === "light"}>
+        Light
+    </button>
+
+    <button
+        onclick={() => setTheme("dark")}
+        class="p-3 border rounded"
+        class:selected={$theme === "dark"}>
+        Dark
+    </button>
+
+    </div>
+
 
     </main>
 
@@ -70,7 +51,8 @@
 
 <!-- CSS Styling -->
 <style>
-    table {
-        margin: 0 auto;
+    .selected {
+    border: 2px solid cyan;
     }
+
 </style>

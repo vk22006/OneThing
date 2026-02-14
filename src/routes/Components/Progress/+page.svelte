@@ -138,10 +138,4 @@
 </div>
 
 
-<!-- CSS Styling -->
-<style>
-    table {
-        margin: 0 auto;
-    }
-</style>
 
