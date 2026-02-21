@@ -1,8 +1,9 @@
-# ![Logo for OneThing](assets/header-dark.png)
-
+![Logo for OneThing](assets/header-dark.png) 
 
 ![GitHub top language](https://img.shields.io/github/languages/top/vk22006/OneThing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
 
 > A focused productivity app built to help me finish what I start.
 
