@@ -1,4 +1,5 @@
-# OneThing
+# ![Logo for OneThing](assets/header-dark.png)
+
 
 ![GitHub top language](https://img.shields.io/github/languages/top/vk22006/OneThing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -69,7 +70,7 @@ This project is being built incrementally with a strong focus on:
 
 ## Roadmap (High-Level)
 
-- [-] Core project + Daily TODO workflow
+- [ ] Core project + Daily TODO workflow
 - [ ] Local persistence
 - [ ] Progress logging
 - [ ] Deadline tracking
