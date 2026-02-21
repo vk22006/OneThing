@@ -7,9 +7,6 @@
 
 > A focused productivity app built to help me finish what I start.
 
-
-![Main screen (initial version)](assets/main_page_.gif)
-
 ## Why OneThing?
 
 I struggled with:
@@ -22,6 +19,8 @@ I struggled with:
 👉 **focus on one project at a time and make visible progress every day.**
 
 This is a personal tool first — built to match my workflow — and a learning project second.
+
+![Main screen (initial version)](assets/main_page_.gif)
 
 ---
 
