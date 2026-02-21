@@ -7,7 +7,6 @@
 
 > A focused productivity app built to help me finish what I start.
 
----
 
 ![Main screen (initial version)](assets/main_page_.gif)
 
