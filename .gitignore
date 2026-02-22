@@ -1,4 +1,5 @@
 node_modules
+.vscode
 
 # Output
 .output
@@ -24,6 +25,7 @@ vite.config.ts.timestamp-*
 
 # Tauri build output
 src-tauri/target/
+src-tauri/gen/schemas
 
 # Rust cache
 **/*.rs.bk
