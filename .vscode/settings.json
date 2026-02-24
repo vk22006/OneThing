@@ -2,6 +2,6 @@
 	"files.associations": {
 		"*.css": "tailwindcss"
 	},
-	"vscode-pets.theme": "none",
+	"vscode-pets.theme": "forest",
 	"vscode-pets.petSize": "small"
 }
