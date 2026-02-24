@@ -1,5 +1,6 @@
 ![Logo for OneThing](assets/header-dark.png) 
 
+![Release](https://img.shields.io/github/v/release/vk22006/OneThing)
 ![GitHub top language](https://img.shields.io/github/languages/top/vk22006/OneThing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
