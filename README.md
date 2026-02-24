@@ -42,14 +42,13 @@ No cloud. No accounts. No distractions.
 ### Current
 
 - **Frontend:** Svelte
+- **Desktop wrapper:** Tauri (Rust)
 - **Language:** JavaScript / HTML / CSS
 
 ### Possible Additions
 
-- **Desktop wrapper:** Tauri (Rust)  
-  - For native desktop builds
-  - Local file storage
-  - System notifications
+- Local file storage
+- System notifications
 
 > The app is intentionally built as a web-first application so it can evolve into a desktop app without a rewrite.
 
