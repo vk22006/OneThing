@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Header from '../../Header.svelte';
-    import Sidebar from '../../sidebar.svelte';
+    import Header from '../../../lib/layout/Header.svelte';
+    import Sidebar from '../../../lib/layout/Sidebar.svelte';
     import { fly, fade } from "svelte/transition";
     import { onMount } from "svelte";
 
