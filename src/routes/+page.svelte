@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Header from './Header.svelte';
-    import Sidebar from './sidebar.svelte';
+    import Header from '../lib/layout/Header.svelte';
+    import Sidebar from '../lib/layout/Sidebar.svelte';
     import { fly, fade } from "svelte/transition";
     import { onMount } from "svelte";
 
@@ -58,14 +58,17 @@
 
 </script>
 
-<div class="flex">
 
-  <Sidebar title="OneThing">
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/">Tasks</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/ProjectInfo">Project Info</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/Progress">Progress</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/Settings">Settings</a></button>
-  </Sidebar>
+
+<div class="flex justify-between">
+
+    <Sidebar title="OneThing">
+        <a href="/"><button class="block hover:bg-gray-700 p-2 rounded">Tasks</button></a>
+        <a href="/Components/ProjectInfo"><button class="block hover:bg-gray-700 p-2 rounded">Project Info</button></a>
+        <a href="/Components/Progress"><button class="block hover:bg-gray-700 p-2 rounded">Progress</button></a>
+        <a href="/Components/Settings"><button class="block hover:bg-gray-700 p-2 rounded">Settings</button></a>
+    </Sidebar>
+  
 
   <main class="flex-1 p-6">
     
@@ -131,4 +134,5 @@
     table {
         margin: 0 auto;
     }
+    
 </style>

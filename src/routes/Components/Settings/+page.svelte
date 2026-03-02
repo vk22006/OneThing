@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Header from '../../Header.svelte';
-    import Sidebar from '../../sidebar.svelte';
+    import Header from '../../../lib/layout/Header.svelte';
+    import Sidebar from '../../../lib/layout/Sidebar.svelte';
     import { theme, type Theme } from "$lib/stores/theme";
 
     let page = $state('Settings');
