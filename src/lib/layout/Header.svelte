@@ -2,16 +2,6 @@
     let { page } = $props();
 </script>
 
-<div class="p-6">
-<h1>{page}</h1>
-</div>
-
-<style>
-    h1 {
-        font-size: 40px;
-        text-align: center;
-        margin: 100px auto 25px auto;
-
-    }
-
-</style>
+<header class="flex items-center justify-between px-8 py-5 border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-0 z-20">
+    <h1 class="text-[17px] font-semibold text-gray-900 tracking-tight">{page}</h1>
+</header>
