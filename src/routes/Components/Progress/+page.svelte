@@ -1,9 +1,8 @@
 <script lang="ts">
     import Header from '../../../lib/layout/Header.svelte';
-    import Sidebar from '../../../lib/layout/Sidebar.svelte';
     import { onMount } from "svelte";
 
-    let page = $state('Progress Dashboard');
+    let pageTitle = $state('Progress Dashboard');
 
     type Status = 'TODO' | 'DONE';
 
@@ -24,117 +23,74 @@
 
     onMount(() => {
         const stored = localStorage.getItem("project_info");
-
         if (stored) {
             projects = JSON.parse(stored);
         }
     });
 
     let totalProjects = $derived(projects.length);
-    let totalTasks = $derived(
-        projects.reduce(
-            (sum, p) => sum + p.tasks.length, 0
-        ));
-    let completedTasks = $derived(
-        projects.reduce(
-            (sum, p) =>
-                sum + p.tasks.filter(
-                    t => t.status === "DONE"
-                ).length,
-            0
-        ));
-    let overallProgress =$derived(
-        totalTasks === 0
-            ? 0
-            : Math.round((completedTasks / totalTasks) * 100));
-
-
-    
-
-
+    let totalTasks = $derived(projects.reduce((sum, p) => sum + p.tasks.length, 0));
+    let completedTasks = $derived(projects.reduce((sum, p) => sum + p.tasks.filter(t => t.status === "DONE").length, 0));
+    let overallProgress = $derived(totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100));
 </script>
 
-<div class="flex">
+<Header page={pageTitle} />
 
-  <Sidebar title="OneThing">
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/">Tasks</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/ProjectInfo">Project Info</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/Progress">Progress</a></button>
-    <button class="block hover:bg-gray-700 p-2 rounded"><a href="/Components/Settings">Settings</a></button>
-  </Sidebar>
-
-  <main class="flex-1 p-6">
-    
-    <Header {page} />
-    
-    <div class="grid grid-cols-2 gap-4 p-6">
-
-    <div class="p-4 border rounded">
-        <h3>Total Projects</h3>
-        <p class="text-2xl">{totalProjects}</p>
+<div class="px-8 py-8 max-w-5xl mx-auto w-full">
+    <!-- Overview Cards -->
+    <div class="grid grid-cols-4 gap-4 mb-10">
+        <div class="bg-white border border-gray-200 rounded-[14px] shadow-sm p-5 hover:shadow-md transition-shadow">
+            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Projects</p>
+            <p class="text-3xl font-bold text-gray-900">{totalProjects}</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-[14px] shadow-sm p-5 hover:shadow-md transition-shadow">
+            <p class="text-[13px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Tasks</p>
+            <p class="text-3xl font-bold text-gray-900">{totalTasks}</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-[14px] shadow-sm p-5 hover:shadow-md transition-shadow">
+            <p class="text-[13px] font-bold text-emerald-500 uppercase tracking-wide mb-1.5">Completed</p>
+            <p class="text-3xl font-bold text-emerald-600">{completedTasks}</p>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-[14px] shadow-sm p-5 hover:shadow-md transition-shadow">
+            <p class="text-[13px] font-bold text-blue-500 uppercase tracking-wide mb-1.5">Progress</p>
+            <p class="text-3xl font-bold text-blue-600">{overallProgress}%</p>
+        </div>
     </div>
 
-    <div class="p-4 border rounded">
-        <h3>Total Tasks</h3>
-        <p class="text-2xl">{totalTasks}</p>
+    <!-- Overall Completion bar -->
+    <div class="bg-white border border-gray-200 rounded-[14px] shadow-sm p-6 mb-10">
+        <div class="flex justify-between items-end mb-3.5">
+            <h3 class="text-[15px] font-bold text-gray-900 tracking-tight">Overall Completion</h3>
+            <span class="text-[14px] font-bold {overallProgress === 100 ? 'text-emerald-500' : 'text-blue-600'}">{overallProgress}%</span>
+        </div>
+        <div class="w-full h-3 bg-gray-100/80 rounded-full overflow-hidden">
+            <div class="h-full {overallProgress === 100 ? 'bg-emerald-500' : 'bg-blue-600'} rounded-full transition-all duration-700 ease-out" style="width: {overallProgress}%"></div>
+        </div>
     </div>
 
-    <div class="p-4 border rounded">
-        <h3>Completed Tasks</h3>
-        <p class="text-2xl">{completedTasks}</p>
+    <h2 class="text-lg font-bold text-gray-900 tracking-tight mb-5">Project Breakdown</h2>
+
+    <!-- Project-wise progress -->
+    <div class="grid grid-cols-2 gap-4">
+        {#each projects as project}
+            {@const done = project.tasks.filter(t => t.status === "DONE").length}
+            {@const percent = project.tasks.length === 0 ? 0 : Math.round((done / project.tasks.length)*100)}
+            
+            <div class="bg-white border border-gray-200 rounded-[14px] shadow-sm p-5 hover:shadow-md hover:border-gray-300 transition-all cursor-default">
+                <div class="flex justify-between mb-3.5">
+                    <h4 class="font-semibold text-gray-900 translate-y-[-1px]">{project.title}</h4>
+                    <span class="text-[13px] font-bold {percent === 100 ? 'text-emerald-500' : 'text-gray-500'}">{percent}%</span>
+                </div>
+                <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-2.5">
+                    <div class="h-full {percent === 100 ? 'bg-emerald-500' : 'bg-blue-500'} rounded-full transition-all duration-500 ease-out" style="width: {percent}%"></div>
+                </div>
+                <p class="text-[12px] font-medium text-gray-400">{done} of {project.tasks.length} tasks completed</p>
+            </div>
+        {/each}
+        {#if projects.length === 0}
+            <div class="col-span-2 text-center py-12 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50/50">
+                <p class="text-[14px] font-medium text-gray-500">No projects added yet.</p>
+            </div>
+        {/if}
     </div>
-
-    <div class="p-4 border rounded">
-        <h3>Overall Progress</h3>
-        <p class="text-2xl">{overallProgress}%</p>
-    </div>
-
-    </div>
-
-    <div class="p-6">
-        <h3 class="mb-2">Overall Completion</h3>
-
-        <progress
-            max="100"
-            value={overallProgress}
-            class="w-full h-4">
-        </progress>
-
-        <p>{overallProgress}% completed</p>
-    </div>
-
-    <h1>Project wise progress</h1>
-
-    {#each projects as project}
-
-    {@const done =
-        project.tasks.filter(
-            t => t.status === "DONE"
-        ).length}
-
-    {@const percent =
-        project.tasks.length === 0
-            ? 0
-            : Math.round((done / project.tasks.length)*100)}
-
-    <div class="p-4 border rounded mb-3">
-
-    <h4>{project.title}</h4>
-
-    <progress max="100" value={percent} class="w-full"></progress>
-
-    <p>{percent}% complete</p>
-
-    </div>
-
-    {/each}
-
-
-
-
-    </main>
-
 </div>
-
-
-
