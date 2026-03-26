@@ -23,7 +23,8 @@ html, body {
 	--header-bg: rgba(255, 255, 255, 0.8);
 }
 
-body.light {
+/* Light theme (explicit), applied via <html data-theme="light"> */
+html[data-theme='light'] {
 	/* Explicitly set light variables so switching from dark is always clean. */
 	--app-bg: #ffffff;
 	--surface: #ffffff;
@@ -37,12 +38,10 @@ body.light {
 	--border-2: #f3f4f6;
 	--nav-hover-bg: rgba(0, 0, 0, 0.05);
 	--header-bg: rgba(255, 255, 255, 0.8);
-
-	background: var(--app-bg);
-	color: var(--text);
 }
 
-body.dark {
+/* Dark theme, applied via <html data-theme="dark"> */
+html[data-theme='dark'] {
 	--app-bg: #05080e;
 	--surface: #0b1220;
 	--surface-2: #0f1a2e;
@@ -55,7 +54,18 @@ body.dark {
 	--border-2: #111827;
 	--nav-hover-bg: rgba(255, 255, 255, 0.08);
 	--header-bg: rgba(11, 18, 32, 0.8);
+}
 
+/* Apply background/text from variables (works for both themes) */
+html, body {
 	background: var(--app-bg);
 	color: var(--text);
+}
+
+/* Back-compat for existing body class selectors (optional) */
+body.light {
+	/* no-op: variables are driven by html[data-theme='light'] */
+}
+body.dark {
+	/* no-op: variables are driven by html[data-theme='dark'] */
 }
