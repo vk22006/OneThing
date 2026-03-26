@@ -1,7 +1,10 @@
 <script lang="ts">
-    import Header from '../lib/layout/Header.svelte';
-    import { fly, fade } from "svelte/transition";
     import { onMount } from "svelte";
+    import Header from "../lib/layout/Header.svelte";
+    import { fly, fade } from "svelte/transition";
+    import { notificationSettings } from "$lib/stores/notifications";
+    import { NotificationManager } from "$lib/notifications/notificationManager";
+    import { focusScheduler } from "$lib/notifications/scheduler";
 
     let pageTitle = $state('Daily TODO List');
 
@@ -10,32 +13,69 @@
     type User = {
         id: number;
         task: string;
+        deadline?: string; // Time string HH:mm
         status: Status;
     };
     let users = $state<User[]>([]);
     let newTask = $state("");
+    let deadlineTime = $state("");
 
     onMount(() => {
         const stored = localStorage.getItem("tasks");
         if (stored) {
             users.push(...JSON.parse(stored));
         }
+
+        // Start scheduler if enabled
+        const unsubscribe = notificationSettings.subscribe(settings => {
+            if (settings.enabled) {
+                focusScheduler.updateSettings(settings);
+                focusScheduler.start();
+            } else {
+                focusScheduler.stop();
+            }
+        });
+
+        return () => unsubscribe();
     });
 
     $effect(() => {
         localStorage.setItem("tasks", JSON.stringify(users));
     });
 
-    function addTask(task: string) {
+    async function addTask(task: string) {
         if (!task.trim()) return;
 
-        users.push({
-            id: Date.now(),
+        const id = Date.now();
+        const newUser: User = {
+            id,
             task,
             status: "TODO"
-        });
+        };
 
+        if (deadlineTime) {
+            newUser.deadline = deadlineTime;
+            
+            // Calculate absolute time for notification
+            // Simple logic: Assume deadline is today
+            const now = new Date();
+            const [hours, mins] = deadlineTime.split(':').map(Number);
+            const deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, mins);
+            
+            // If the deadline is in the future, schedule a notification
+            if (deadline > now) {
+                await NotificationManager.schedule(
+                    id.toString(),
+                    "Task Deadline Approaching!",
+                    `Your task "${task}" is due soon.`,
+                    deadline
+                );
+            }
+        }
+
+        users.push(newUser);
         newTask = "";
+        deadlineTime = "";
     }
 
     function toggle(id: number) {
@@ -79,9 +119,9 @@
     </div>
 
     <!-- Input Area -->
-    <div class="relative group mb-8">
-        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+    <div class="bg-white border border-gray-200 rounded-[24px] shadow-sm p-2 mb-8 flex items-center gap-2 group-focus-within:border-blue-400 group-focus-within:ring-[3px] group-focus-within:ring-blue-100 transition-all">
+        <div class="flex-shrink-0 pl-4 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
             </svg>
         </div>
@@ -90,9 +130,27 @@
             onkeydown={(e) => {
                 if(e.key === "Enter") addTask(newTask);
             }}
-            placeholder="Add a new task... (press Enter)"
-            class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm placeholder-gray-400 focus:outline-none focus:ring-[3px] focus:ring-blue-100 focus:border-blue-500 focus:bg-white transition-all shadow-sm"
+            placeholder="Add a new task..."
+            class="flex-1 py-3 text-sm placeholder-gray-400 focus:outline-none bg-transparent"
         />
+        
+        <div class="flex items-center gap-1.5 px-2 py-1 bg-gray-100 rounded-[14px] hover:bg-gray-200 transition-colors">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <input 
+                type="time" 
+                bind:value={deadlineTime}
+                title="Set Deadline"
+                class="bg-transparent text-xs font-bold text-gray-700 focus:outline-none border-none p-0 cursor-pointer"
+            />
+        </div>
+
+        <button 
+            onclick={() => addTask(newTask)}
+            class="mr-1.5 p-2 bg-blue-600 text-white rounded-[14px] hover:bg-blue-700 transition-colors shadow-sm"
+            aria-label="Add task"
+        >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+        </button>
     </div>
 
     <!-- Task List -->
@@ -123,9 +181,17 @@
                     </button>
 
                     <!-- Task Text -->
-                    <span class="flex-1 text-[14px] {user.status === 'DONE' ? 'text-gray-400 line-through' : 'text-gray-800 font-medium'} transition-all px-1 select-none">
-                        {user.task}
-                    </span>
+                    <div class="flex-1 flex flex-col justify-center min-w-0">
+                        <span class="text-[14px] {user.status === 'DONE' ? 'text-gray-400 line-through' : 'text-gray-800 font-medium'} transition-all px-1 select-none truncate">
+                            {user.task}
+                        </span>
+                        {#if user.deadline}
+                            <span class="text-[10px] text-gray-400 font-bold px-1 mt-0.5 flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                {user.deadline}
+                            </span>
+                        {/if}
+                    </div>
 
                     <!-- Delete Button -->
                     <button 
