@@ -6,8 +6,6 @@
     "main"
   ],
   "permissions": [
-    "core:default",
-    "notification:default",
-    "store:default"
+    "core:default"
   ]
 }

@@ -23,6 +23,7 @@ This is a personal tool first — built to match my workflow — and a learning 
 
 ![Main screen (initial version)](assets/main_page_.gif)
 
+---
 
 ## Core Features (Planned)
 
@@ -35,6 +36,7 @@ This is a personal tool first — built to match my workflow — and a learning 
 
 No cloud. No accounts. No distractions.
 
+---
 
 ## Tech Stack
 
@@ -42,7 +44,7 @@ No cloud. No accounts. No distractions.
 
 - **Frontend:** Svelte
 - **Desktop wrapper:** Tauri (Rust)
-- **Language:** JavaScript / TypeScript / HTML / CSS
+- **Language:** JavaScript / HTML / CSS
 
 ### Possible Additions
 
@@ -51,6 +53,7 @@ No cloud. No accounts. No distractions.
 
 > The app is intentionally built as a web-first application so it can evolve into a desktop app without a rewrite.
 
+---
 
 ## Project Status
 
@@ -66,15 +69,16 @@ This project is being built incrementally with a strong focus on:
 
 ## Roadmap (High-Level)
 
-- [x] Core project + Daily TODO workflow
-- [ ] Local persistence (Under progress)
-- [x] Progress logging
-- [x] Deadline tracking
-- [ ] Desktop notifications (Under progress)
-- [x] Polishing + stability
+- [ ] Core project + Daily TODO workflow
+- [ ] Local persistence
+- [ ] Progress logging
+- [ ] Deadline tracking
+- [ ] Desktop notifications (if Tauri is added)
+- [ ] Polishing + stability
 
 Detailed roadmap lives outside this README to keep this file concise.
 
+---
 
 ## Design Philosophy
 
@@ -84,6 +88,7 @@ Detailed roadmap lives outside this README to keep this file concise.
 - Local data ownership
 - Built for long-term personal use, not virality
 
+---
 
 ## What This Project Demonstrates
 
@@ -92,6 +97,7 @@ Detailed roadmap lives outside this README to keep this file concise.
 - Frontend state management
 - (Optional) Desktop app architecture with web + native integration
 
+---
 
 ## Future Improvements
 
@@ -100,6 +106,7 @@ Detailed roadmap lives outside this README to keep this file concise.
 - Keyboard-first workflow
 - Cross-platform desktop builds
 
+---
 
 ## License
 
