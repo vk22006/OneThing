@@ -8,12 +8,54 @@ html, body {
 	overflow: hidden;
 }
 
+:root {
+	--app-bg: #ffffff;
+	--surface: #ffffff;
+	--surface-2: #f9fafb;
+	--surface-3: rgba(249, 250, 251, 0.6);
+	--sidebar-bg: #f9f9fb;
+	--text: #111827;
+	--muted: #6b7280;
+	--muted-2: #9ca3af;
+	--border: #e5e7eb;
+	--border-2: #f3f4f6;
+	--nav-hover-bg: rgba(0, 0, 0, 0.05);
+	--header-bg: rgba(255, 255, 255, 0.8);
+}
+
 body.light {
-    background: white;
-    color: black;
+	/* Explicitly set light variables so switching from dark is always clean. */
+	--app-bg: #ffffff;
+	--surface: #ffffff;
+	--surface-2: #f9fafb;
+	--surface-3: rgba(249, 250, 251, 0.6);
+	--sidebar-bg: #f9f9fb;
+	--text: #111827;
+	--muted: #6b7280;
+	--muted-2: #9ca3af;
+	--border: #e5e7eb;
+	--border-2: #f3f4f6;
+	--nav-hover-bg: rgba(0, 0, 0, 0.05);
+	--header-bg: rgba(255, 255, 255, 0.8);
+
+	background: var(--app-bg);
+	color: var(--text);
 }
 
 body.dark {
-    background: #05080e;
-    color: white;
+	--app-bg: #05080e;
+	--surface: #0b1220;
+	--surface-2: #0f1a2e;
+	--surface-3: rgba(15, 26, 46, 0.6);
+	--sidebar-bg: #0a1020;
+	--text: #f9fafb;
+	--muted: #9ca3af;
+	--muted-2: #6b7280;
+	--border: #1f2937;
+	--border-2: #111827;
+	--nav-hover-bg: rgba(255, 255, 255, 0.08);
+	--header-bg: rgba(11, 18, 32, 0.8);
+
+	background: var(--app-bg);
+	color: var(--text);
 }
