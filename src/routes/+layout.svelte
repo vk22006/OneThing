@@ -11,7 +11,10 @@
 	let { children } = $props();
 
 	$effect(() => {
-		document.body.className = $theme;
+		// Apply theme on client only; keep it mutually exclusive.
+		if (typeof document === 'undefined') return;
+		document.body.classList.remove('light', 'dark');
+		document.body.classList.add($theme);
 	});
 
 	function localDateKey(d: Date): string {
