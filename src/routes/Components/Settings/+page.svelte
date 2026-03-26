@@ -40,6 +40,16 @@
     function setTheme(t: Theme) {
         theme.set(t);
         currentTheme = t;
+        
+        // Force immediate DOM update regardless of the store's state
+        if (typeof document !== 'undefined') {
+            try {
+                const safeVal = (t || 'light').toLowerCase();
+                document.documentElement.setAttribute('data-theme', safeVal);
+                document.body.classList.remove('light', 'dark', 'Light', 'Dark');
+                document.body.classList.add(safeVal);
+            } catch (e) {}
+        }
     }
 
     function updateSetting(key: keyof SettingsState, value: SettingsState[keyof SettingsState]) {

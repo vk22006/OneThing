@@ -1,7 +1,7 @@
 <script lang="ts">
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
-	import { theme } from '$lib/stores/theme';
+	import { theme, initThemeStore } from '$lib/stores/theme';
 	import { onMount } from 'svelte';
 	import { LazyStore } from '@tauri-apps/plugin-store';
 	import { notificationSettings, loadSettings } from '$lib/stores/notifications';
@@ -9,18 +9,6 @@
 	import AppShell from '$lib/layout/AppShell.svelte';
 
 	let { children } = $props();
-	let currentTheme = $state<'light' | 'dark'>('light');
-
-	$effect(() => {
-		// Apply theme on client only; keep it mutually exclusive.
-		if (typeof document === 'undefined') return;
-		// 1) Drive CSS variables via <html data-theme="..."> (reliable across WebViews)
-		document.documentElement.dataset.theme = currentTheme;
-
-		// 2) Keep body classes too (backwards compatibility for any selectors)
-		document.body.classList.remove('light', 'dark');
-		document.body.classList.add(currentTheme);
-	});
 
 	function localDateKey(d: Date): string {
 		// Use local time to avoid "yesterday/tomorrow" issues around midnight.
@@ -31,8 +19,18 @@
 	}
 
 	onMount(() => {
+		// Initialize persistent theme store
+		initThemeStore();
+		
+		// Force DOM sync from within the mounted component
 		const unsubTheme = theme.subscribe((value) => {
-			currentTheme = value;
+			if (typeof document === 'undefined') return;
+			try {
+				const safeVal = (value || 'light').toLowerCase();
+				document.documentElement.setAttribute('data-theme', safeVal);
+				document.body.classList.remove('light', 'dark', 'Light', 'Dark');
+				document.body.classList.add(safeVal);
+			} catch (e) {}
 		});
 
 		void (async () => {
@@ -93,9 +91,9 @@
 			await store.set('lastDeadlineReminderDate', today);
 			await store.save();
 		})();
-
+		
 		return () => {
-			unsubTheme();
+		    unsubTheme();
 		};
 	});
 </script>
@@ -109,6 +107,3 @@
 <AppShell>
 	{@render children()}
 </AppShell>
-
-
-
