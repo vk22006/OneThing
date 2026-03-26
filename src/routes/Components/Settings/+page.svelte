@@ -6,17 +6,45 @@
     import { loadSettings } from "$lib/stores/notifications";
 
     let pageTitle = $state('Settings');
+    type SettingsState = {
+        enabled: boolean;
+        sound: boolean;
+        focusMode: boolean;
+        focusInterval: number;
+    };
+
+    let currentTheme = $state<Theme>('light');
+    let settingsState = $state<SettingsState>({
+        enabled: true,
+        sound: true,
+        focusMode: false,
+        focusInterval: 25
+    });
 
     onMount(() => {
+        const unsubTheme = theme.subscribe((value) => {
+            currentTheme = value;
+        });
+        const unsubNotifications = notificationSettings.subscribe((value) => {
+            settingsState = { ...value };
+        });
+
         loadSettings();
+
+        return () => {
+            unsubTheme();
+            unsubNotifications();
+        };
     });
 
     function setTheme(t: Theme) {
         theme.set(t);
+        currentTheme = t;
     }
 
-    function updateSetting(key: string, value: any) {
-        notificationSettings.update(s => ({ ...s, [key]: value }));
+    function updateSetting(key: keyof SettingsState, value: SettingsState[keyof SettingsState]) {
+        settingsState = { ...settingsState, [key]: value };
+        notificationSettings.set(settingsState);
     }
 </script>
 
@@ -32,17 +60,17 @@
         <div class="flex gap-4">
             <button
                 onclick={() => setTheme("light")}
-                class="flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-semibold { $theme === 'light' ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' : 'border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-2)]' }">
+                class="flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-semibold { currentTheme === 'light' ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' : 'border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-2)]' }">
                 Light Mode
             </button>
             <button
                 onclick={() => setTheme("dark")}
-                class="flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-semibold { $theme === 'dark' ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' : 'border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-2)]' }">
+                class="flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-semibold { currentTheme === 'dark' ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' : 'border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-2)]' }">
                 Dark Mode
             </button>
         </div>
         <div class="mt-4 text-[12px] text-[var(--muted)]">
-            Current theme: <span class="font-bold text-[var(--text)]">{$theme}</span>
+            Current theme: <span class="font-bold text-[var(--text)]">{currentTheme}</span>
         </div>
     </div>
 
@@ -61,20 +89,20 @@
                     <p class="text-sm text-[var(--muted)]">Get reminders for deadlines and focus nudges</p>
                 </div>
                 <button 
-                    onclick={() => updateSetting('enabled', !$notificationSettings.enabled)}
+                    onclick={() => updateSetting('enabled', !settingsState.enabled)}
                     aria-label="Toggle system notifications"
                     title="Toggle system notifications"
-                    class="w-14 h-8 rounded-full transition-colors relative {$notificationSettings.enabled ? 'bg-cyan-500' : 'bg-gray-300'}">
-                    <div class="absolute top-1 left-1 w-6 h-6 bg-[var(--surface)] rounded-full transition-transform {$notificationSettings.enabled ? 'translate-x-6' : ''}"></div>
+                    class="w-14 h-8 rounded-full transition-colors relative {settingsState.enabled ? 'bg-cyan-500' : 'bg-gray-300'}">
+                    <div class="absolute top-1 left-1 w-6 h-6 bg-[var(--surface)] rounded-full transition-transform {settingsState.enabled ? 'translate-x-6' : ''}"></div>
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 {$notificationSettings.enabled ? '' : 'opacity-50 pointer-events-none transition-opacity'}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 {settingsState.enabled ? '' : 'opacity-50 pointer-events-none transition-opacity'}">
                 <!-- Sound Toggle -->
                 <div class="p-4 border border-[var(--border-2)] rounded-2xl hover:border-cyan-200 transition-colors">
                     <div class="flex items-center justify-between mb-2">
                         <p class="font-bold text-[var(--text)]">Notification Sound</p>
-                        <input type="checkbox" checked={$notificationSettings.sound} onchange={(e) => updateSetting('sound', e.currentTarget.checked)} class="w-5 h-5 accent-cyan-500" />
+                        <input type="checkbox" checked={settingsState.sound} onchange={(e) => updateSetting('sound', e.currentTarget.checked)} class="w-5 h-5 accent-cyan-500" />
                     </div>
                     <p class="text-xs text-[var(--muted)]">Play a subtle sound for every alert</p>
                 </div>
@@ -83,7 +111,7 @@
                 <div class="p-4 border border-[var(--border-2)] rounded-2xl hover:border-cyan-200 transition-colors">
                     <div class="flex items-center justify-between mb-2">
                         <p class="font-bold text-[var(--text)]">Focus Mode</p>
-                        <input type="checkbox" checked={$notificationSettings.focusMode} onchange={(e) => updateSetting('focusMode', e.currentTarget.checked)} class="w-5 h-5 accent-cyan-500" />
+                        <input type="checkbox" checked={settingsState.focusMode} onchange={(e) => updateSetting('focusMode', e.currentTarget.checked)} class="w-5 h-5 accent-cyan-500" />
                     </div>
                     <p class="text-xs text-[var(--muted)]">Suppresses all but urgent deadline alerts</p>
                 </div>
@@ -92,11 +120,11 @@
                 <div class="p-4 border border-[var(--border-2)] rounded-2xl md:col-span-2">
                     <div class="flex justify-between mb-4">
                         <p class="font-bold text-[var(--text)]">Focus Nudge Interval</p>
-                        <span class="px-3 py-1 bg-cyan-100 text-cyan-700 rounded-full font-bold">{$notificationSettings.focusInterval} mins</span>
+                        <span class="px-3 py-1 bg-cyan-100 text-cyan-700 rounded-full font-bold">{settingsState.focusInterval} mins</span>
                     </div>
                     <input 
                         type="range" min="5" max="60" step="5" 
-                        value={$notificationSettings.focusInterval}
+                        value={settingsState.focusInterval}
                         oninput={(e) => updateSetting('focusInterval', parseInt(e.currentTarget.value))}
                         class="w-full h-2 bg-[var(--surface-2)] rounded-lg appearance-none cursor-pointer accent-cyan-500"
                     />
