@@ -112,14 +112,14 @@
         <!-- Progress Bar -->
         <div class="w-32 h-2.5 bg-[var(--surface-2)] rounded-full overflow-hidden flex-shrink-0">
             <div 
-                class="h-full bg-blue-600 rounded-full transition-all duration-500 ease-out" 
+                class="h-full bg-red-600 rounded-full transition-all duration-500 ease-out" 
                 style="width: {completionPercentage}%">
             </div>
         </div>
     </div>
 
     <!-- Input Area -->
-    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] shadow-sm p-2 mb-8 flex items-center gap-2 group-focus-within:border-blue-400 group-focus-within:ring-[3px] group-focus-within:ring-blue-100 transition-all">
+    <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[24px] shadow-sm p-2 mb-8 flex items-center gap-2 group-focus-within:border-red-400 group-focus-within:ring-[3px] group-focus-within:ring-red-100 transition-all">
         <div class="flex-shrink-0 pl-4 flex items-center pointer-events-none">
             <svg class="h-5 w-5 text-[var(--muted-2)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
@@ -146,7 +146,7 @@
 
         <button 
             onclick={() => addTask(newTask)}
-            class="mr-1.5 p-2 bg-blue-600 text-white rounded-[14px] hover:bg-blue-700 transition-colors shadow-sm"
+            class="mr-1.5 p-2 bg-red-600 text-white rounded-[14px] hover:bg-red-700 transition-colors shadow-sm"
             aria-label="Add task"
         >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
@@ -157,8 +157,8 @@
     <div class="flex flex-col gap-2.5">
         {#if users.length === 0}
             <div class="text-center py-14 px-4 border-2 border-dashed border-[var(--border)] rounded-2xl bg-[var(--surface-3)] mt-4">
-                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 </div>
                 <h3 class="text-sm font-semibold text-[var(--text)]">All caught up!</h3>
                 <p class="text-[13px] text-[var(--muted)] mt-1.5">Add a new task above to get started.</p>
@@ -173,7 +173,7 @@
                     <!-- Checkbox Toggle -->
                     <button 
                         onclick={() => toggle(user.id)}
-                        class="flex-shrink-0 w-5 h-5 rounded-[6px] border-[1.5px] flex items-center justify-center transition-colors {user.status === 'DONE' ? 'bg-blue-600 border-blue-600' : 'border-[var(--border)] hover:border-blue-500'}"
+                        class="flex-shrink-0 w-5 h-5 rounded-[6px] border-[1.5px] flex items-center justify-center transition-colors {user.status === 'DONE' ? 'bg-red-600 border-red-600' : 'border-[var(--border)] hover:border-red-500'}"
                     >
                         {#if user.status === 'DONE'}
                             <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>

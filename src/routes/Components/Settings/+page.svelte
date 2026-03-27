@@ -64,18 +64,18 @@
     <!-- Appearance Section -->
     <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[20px] shadow-sm p-8 mb-8">
         <h2 class="text-xl font-bold text-[var(--text)] mb-6 tracking-tight flex items-center gap-2">
-            <span class="w-2 h-6 bg-blue-500 rounded-full"></span>
+            <span class="w-2 h-6 bg-red-500 rounded-full"></span>
             Appearance
         </h2>
         <div class="flex gap-4">
             <button
                 onclick={() => setTheme("light")}
-                class="flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-semibold { currentTheme === 'light' ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' : 'border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-2)]' }">
+                class="flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-semibold { currentTheme === 'light' ? 'border-red-500 bg-red-50 text-red-700 shadow-sm' : 'border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-2)]' }">
                 Light Mode
             </button>
             <button
                 onclick={() => setTheme("dark")}
-                class="flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-semibold { currentTheme === 'dark' ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm' : 'border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-2)]' }">
+                class="flex-1 py-4 px-6 rounded-2xl border-2 transition-all duration-200 font-semibold { currentTheme === 'dark' ? 'border-red-500 bg-red-50 text-red-700 shadow-sm' : 'border-[var(--border)] text-[var(--muted)] hover:bg-[var(--surface-2)]' }">
                 Dark Mode
             </button>
         </div>

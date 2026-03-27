@@ -7,8 +7,11 @@
 	import { notificationSettings, loadSettings } from '$lib/stores/notifications';
 	import { NotificationManager } from '$lib/notifications/notificationManager';
 	import AppShell from '$lib/layout/AppShell.svelte';
+	import SplashScreen from '$lib/components/SplashScreen.svelte';
 
 	let { children } = $props();
+	
+	let appLoaded = $state(false);
 
 	function localDateKey(d: Date): string {
 		// Use local time to avoid "yesterday/tomorrow" issues around midnight.
@@ -104,6 +107,10 @@
 
 <svelte:body />
 
-<AppShell>
-	{@render children()}
-</AppShell>
+<SplashScreen onComplete={() => appLoaded = true} />
+
+<div style="display: {appLoaded ? 'contents' : 'none'}">
+	<AppShell>
+		{@render children()}
+	</AppShell>
+</div>

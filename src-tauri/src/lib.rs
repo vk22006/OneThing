@@ -19,6 +19,7 @@ pub fn run() {
     .invoke_handler(tauri::generate_handler![
         commands::notifications::schedule_notification,
         commands::notifications::send_now,
+        commands::window::restore_main_window,
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
