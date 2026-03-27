@@ -21,10 +21,10 @@ I struggled with:
 
 This is a personal tool first — built to match my workflow — and a learning project second.
 
-![Main screen (initial version)](assets/main_page_.gif)
+![Main screen (initial version)](assets/main_page_1.1.1.gif)
 
 
-## Core Features (Planned)
+## Core Features
 
 - ✅ Project-based TODO list  
 - 📅 Deadlines per project  
@@ -38,16 +38,11 @@ No cloud. No accounts. No distractions.
 
 ## Tech Stack
 
-### Current
-
-- **Frontend:** Svelte
-- **Desktop wrapper:** Tauri (Rust)
-- **Language:** JavaScript / TypeScript / HTML / CSS
-
-### Possible Additions
-
-- Local file storage
-- System notifications
+- **Frontend:** SvelteKit + Tailwind CSS
+- **Desktop wrapper:** Tauri v2 (Rust)
+- **Language:** TypeScript / Svelte / Rust
+- **Storage:** Local file storage (Tauri Store API) & localStorage
+- **System Integration:** Native desktop notifications
 
 > The app is intentionally built as a web-first application so it can evolve into a desktop app without a rewrite.
 
@@ -67,10 +62,10 @@ This project is being built incrementally with a strong focus on:
 ## Roadmap (High-Level)
 
 - [x] Core project + Daily TODO workflow
-- [ ] Local persistence (Under progress)
+- [x] Local persistence
 - [x] Progress logging
 - [x] Deadline tracking
-- [ ] Desktop notifications (Under progress)
+- [x] Desktop notifications
 - [x] Polishing + stability
 
 Detailed roadmap lives outside this README to keep this file concise.
