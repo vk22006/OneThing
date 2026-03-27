@@ -26,12 +26,14 @@ This is a personal tool first — built to match my workflow — and a learning 
 
 ## Core Features
 
+- 🖥️ **Native Desktop Experience**: Advanced window management with a custom splash screen.
 - ✅ Project-based TODO list  
 - 📅 Deadlines per project  
 - 🧠 Project ideas + tool notes  
 - 📝 Daily progress logging  
 - 🔔 Optional daily reminder notification  
 - 📊 Simple progress visibility over time  
+- 🎨 **Dynamic Red Theme**: High-contrast, focused visual system.
 
 No cloud. No accounts. No distractions.
 
@@ -49,13 +51,9 @@ No cloud. No accounts. No distractions.
 
 ## Project Status
 
-🚧 **Active development**
+✅ **Completed (Maintenance Mode)**
 
-This project is being built incrementally with a strong focus on:
-
-- shipping small, usable versions
-- avoiding feature creep
-- maintaining a clean architecture
+This project successfully met its original design goals of providing a focused, local-first workspace for project-based productivity. It is now considered feature-complete.
 
 ---
 
@@ -66,6 +64,8 @@ This project is being built incrementally with a strong focus on:
 - [x] Progress logging
 - [x] Deadline tracking
 - [x] Desktop notifications
+- [x] **v1.1.2: Native Splash Screen**
+- [x] **v1.1.2: Visual Identity Redesign (Red Theme)**
 - [x] Polishing + stability
 
 Detailed roadmap lives outside this README to keep this file concise.
@@ -85,13 +85,11 @@ Detailed roadmap lives outside this README to keep this file concise.
 - Ability to design software around real personal problems
 - Incremental development and scope control
 - Frontend state management
-- (Optional) Desktop app architecture with web + native integration
+- Desktop app architecture with web + native integration
 
 
 ## Future Improvements
 
-- SQLite-based storage
-- Export logs as Markdown
 - Keyboard-first workflow
 - Cross-platform desktop builds
 
