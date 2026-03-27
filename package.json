@@ -1,7 +1,7 @@
 {
 	"name": "onething",
 	"private": true,
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
@@ -33,6 +33,7 @@
 		"vite": "^7.3.1"
 	},
 	"dependencies": {
+		"@tauri-apps/api": "^2.10.1",
 		"@tauri-apps/plugin-notification": "^2.3.3",
 		"@tauri-apps/plugin-store": "^2.4.2"
 	}
