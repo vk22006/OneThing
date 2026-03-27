@@ -52,8 +52,8 @@
             <p class="text-3xl font-bold text-emerald-600">{completedTasks}</p>
         </div>
         <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[14px] shadow-sm p-5 hover:shadow-md transition-shadow">
-            <p class="text-[13px] font-bold text-blue-500 uppercase tracking-wide mb-1.5">Progress</p>
-            <p class="text-3xl font-bold text-blue-600">{overallProgress}%</p>
+            <p class="text-[13px] font-bold text-red-500 uppercase tracking-wide mb-1.5">Progress</p>
+            <p class="text-3xl font-bold text-red-600">{overallProgress}%</p>
         </div>
     </div>
 
@@ -61,10 +61,10 @@
     <div class="bg-[var(--surface)] border border-[var(--border)] rounded-[14px] shadow-sm p-6 mb-10">
         <div class="flex justify-between items-end mb-3.5">
             <h3 class="text-[15px] font-bold text-[var(--text)] tracking-tight">Overall Completion</h3>
-            <span class="text-[14px] font-bold {overallProgress === 100 ? 'text-emerald-500' : 'text-blue-600'}">{overallProgress}%</span>
+            <span class="text-[14px] font-bold {overallProgress === 100 ? 'text-emerald-500' : 'text-red-600'}">{overallProgress}%</span>
         </div>
         <div class="w-full h-3 bg-[var(--surface-2)] rounded-full overflow-hidden">
-            <div class="h-full {overallProgress === 100 ? 'bg-emerald-500' : 'bg-blue-600'} rounded-full transition-all duration-700 ease-out" style="width: {overallProgress}%"></div>
+            <div class="h-full {overallProgress === 100 ? 'bg-emerald-500' : 'bg-red-600'} rounded-full transition-all duration-700 ease-out" style="width: {overallProgress}%"></div>
         </div>
     </div>
 
@@ -82,7 +82,7 @@
                     <span class="text-[13px] font-bold {percent === 100 ? 'text-emerald-500' : 'text-[var(--muted)]'}">{percent}%</span>
                 </div>
                 <div class="w-full h-2 bg-[var(--surface-2)] rounded-full overflow-hidden mb-2.5">
-                    <div class="h-full {percent === 100 ? 'bg-emerald-500' : 'bg-blue-500'} rounded-full transition-all duration-500 ease-out" style="width: {percent}%"></div>
+                    <div class="h-full {percent === 100 ? 'bg-emerald-500' : 'bg-red-500'} rounded-full transition-all duration-500 ease-out" style="width: {percent}%"></div>
                 </div>
                 <p class="text-[12px] font-medium text-[var(--muted-2)]">{done} of {project.tasks.length} tasks completed</p>
             </div>
