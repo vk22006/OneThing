@@ -107,19 +107,19 @@
             <input
                 bind:value={newProject}
                 placeholder="Project Title"
-                class="block w-full px-4 py-3 bg-[var(--surface-2)] border border-[var(--border)] rounded-xl text-sm placeholder-[var(--muted-2)] focus:outline-none focus:ring-[3px] focus:ring-blue-100 focus:border-blue-500 focus:bg-[var(--surface)] transition-all shadow-sm text-[var(--text)]"
+                class="block w-full px-4 py-3 bg-[var(--surface-2)] border border-[var(--border)] rounded-xl text-sm placeholder-[var(--muted-2)] focus:outline-none focus:ring-[3px] focus:ring-red-100 focus:border-red-500 focus:bg-[var(--surface)] transition-all shadow-sm text-[var(--text)]"
             />
         </div>
         <div class="w-48 relative">
             <input
                 bind:value={newDeadline}
                 placeholder="Deadline (DD-MM-YYYY)"
-                class="block w-full px-4 py-3 bg-[var(--surface-2)] border border-[var(--border)] rounded-xl text-sm placeholder-[var(--muted-2)] focus:outline-none focus:ring-[3px] focus:ring-blue-100 focus:border-blue-500 focus:bg-[var(--surface)] transition-all shadow-sm text-[var(--text)]"
+                class="block w-full px-4 py-3 bg-[var(--surface-2)] border border-[var(--border)] rounded-xl text-sm placeholder-[var(--muted-2)] focus:outline-none focus:ring-[3px] focus:ring-red-100 focus:border-red-500 focus:bg-[var(--surface)] transition-all shadow-sm text-[var(--text)]"
             />
         </div>
         <button
             onclick={() => addProjDetails(newProject,newDeadline)}
-            class="px-5 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-xl transition-colors shadow-sm whitespace-nowrap">
+            class="px-5 py-3 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white font-medium rounded-xl transition-colors shadow-sm whitespace-nowrap">
             Add Project
         </button>
     </div>
@@ -156,10 +156,10 @@
                     <div class="mb-5">
                         <div class="flex justify-between items-end mb-2.5">
                             <span class="text-[12px] font-bold text-[var(--muted-2)] uppercase tracking-wider">Progress</span>
-                            <span class="text-sm font-bold {projectProgress(project) === 100 ? 'text-emerald-500' : 'text-blue-600'}">{projectProgress(project)}%</span>
+                            <span class="text-sm font-bold {projectProgress(project) === 100 ? 'text-emerald-500' : 'text-red-600'}">{projectProgress(project)}%</span>
                         </div>
                         <div class="w-full h-2 bg-[var(--surface-2)] rounded-full overflow-hidden">
-                            <div class="h-full {projectProgress(project) === 100 ? 'bg-emerald-500' : 'bg-blue-600'} rounded-full transition-all duration-500 ease-out" style="width: {projectProgress(project)}%"></div>
+                            <div class="h-full {projectProgress(project) === 100 ? 'bg-emerald-500' : 'bg-red-600'} rounded-full transition-all duration-500 ease-out" style="width: {projectProgress(project)}%"></div>
                         </div>
                     </div>
 
@@ -170,7 +170,7 @@
                             <div class="group flex items-center gap-3 p-3 bg-[var(--surface-3)] border border-[var(--border-2)] rounded-[10px] hover:border-[var(--border)] transition-colors">
                                 <button 
                                     onclick={() => toggleTask(project.id, task.id)}
-                                    class="flex-shrink-0 w-5 h-5 rounded-[6px] border-[1.5px] flex items-center justify-center transition-colors {task.status === 'DONE' ? 'bg-blue-600 border-blue-600' : 'border-[var(--border)] hover:border-blue-500'}"
+                                    class="flex-shrink-0 w-5 h-5 rounded-[6px] border-[1.5px] flex items-center justify-center transition-colors {task.status === 'DONE' ? 'bg-red-600 border-red-600' : 'border-[var(--border)] hover:border-red-500'}"
                                     aria-label="Toggle task status"
                                 >
                                     {#if task.status === 'DONE'}
@@ -197,7 +197,7 @@
                             </div>
                             <input
                                 placeholder="Add a new task..."
-                                class="w-full pl-10 pr-4 py-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-[10px] text-[14px] placeholder-[var(--muted-2)] focus:outline-none focus:ring-[3px] focus:ring-blue-100 focus:border-blue-500 shadow-sm transition-all text-[var(--text)]"
+                                class="w-full pl-10 pr-4 py-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-[10px] text-[14px] placeholder-[var(--muted-2)] focus:outline-none focus:ring-[3px] focus:ring-red-100 focus:border-red-500 shadow-sm transition-all text-[var(--text)]"
                                 onkeydown={(e)=>{
                                     if(e.key==="Enter") {
                                         addTask(project.id, (e.target as HTMLInputElement).value);
@@ -217,7 +217,7 @@
                         <textarea
                             bind:value={project.notes}
                             placeholder="Add project notes, links, or details here..."
-                            class="w-full bg-[var(--surface-3)] border border-[var(--border-2)] rounded-[10px] px-3.5 py-3 text-[13.5px] text-[var(--text)] placeholder-[var(--muted-2)] focus:outline-none focus:ring-[3px] focus:ring-blue-100 focus:border-blue-200 focus:bg-[var(--surface)] transition-all resize-none min-h-[100px]"
+                            class="w-full bg-[var(--surface-3)] border border-[var(--border-2)] rounded-[10px] px-3.5 py-3 text-[13.5px] text-[var(--text)] placeholder-[var(--muted-2)] focus:outline-none focus:ring-[3px] focus:ring-red-100 focus:border-red-200 focus:bg-[var(--surface)] transition-all resize-none min-h-[100px]"
                         ></textarea>
                     </div>
                 </div>
@@ -226,8 +226,8 @@
         
         {#if projects.length === 0}
             <div class="text-center py-16 border-2 border-dashed border-[var(--border)] rounded-[14px] bg-[var(--surface-3)]">
-                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 </div>
                 <h3 class="text-[15px] font-semibold text-[var(--text)]">No Projects</h3>
                 <p class="text-[13px] text-[var(--muted)] mt-1">Create a new project above to organize your tasks.</p>
