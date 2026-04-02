@@ -53,7 +53,7 @@
 		class="fixed inset-0 z-[99999] flex flex-col items-center justify-end bg-black bg-cover bg-center bg-no-repeat transition-opacity duration-[800ms] ease-in-out select-none {fadeOut
 			? 'opacity-0'
 			: 'opacity-100'}"
-		style="background-image: url('/assets/app_img/splash_screen.png');"
+		style="background-image: url('/assets/app_img/splash_screen_.png');"
 	>
 		<!-- Stacked elements matching exact reference layout -->
 		<div class="mb-[20vh] flex w-full flex-col items-center">

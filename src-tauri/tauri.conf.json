@@ -13,8 +13,8 @@
 		"windows": [
 			{
 				"title": "OneThing",
-				"width": 700,
-				"height": 400,
+				"width": 900,
+				"height": 560,
 				"resizable": false,
 				"fullscreen": false,
 				"decorations": false,
