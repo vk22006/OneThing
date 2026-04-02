@@ -11,6 +11,7 @@ This document explains how to get help, ask questions, or report problems.
 If you encounter a bug, please open an issue using the **Bug Report** template.
 
 Include:
+
 - Steps to reproduce
 - Expected behavior
 - Actual behavior
@@ -24,6 +25,7 @@ Include:
 Have an idea to improve OneThing?
 
 Open an issue using:
+
 - Feature Request
 - Improvement Proposal
 
@@ -59,6 +61,7 @@ Improving clarity helps everyone.
 Maintained by: **vk22006**
 
 For general inquiries:
+
 - Open a GitHub Issue
 - Visit: https://github.com/vk22006
 
