@@ -70,8 +70,6 @@ This project successfully met its original design goals of providing a focused, 
 - [x] **v1.1.3: New Themes (Forest, Celestial Night, Earthy, Charcoal)**
 - [x] Polishing + stability
 
-Detailed roadmap lives outside this README to keep this file concise.
-
 
 ## Design Philosophy
 
