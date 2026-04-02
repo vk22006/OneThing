@@ -46,7 +46,17 @@
 			try {
 				const safeVal = (t || 'light').toLowerCase();
 				document.documentElement.setAttribute('data-theme', safeVal);
-				document.body.classList.remove('light', 'dark', 'Light', 'Dark', 'baroque-blue', 'forest', 'celestial-night', 'earthy', 'charcoal');
+				document.body.classList.remove(
+					'light',
+					'dark',
+					'Light',
+					'Dark',
+					'baroque-blue',
+					'forest',
+					'celestial-night',
+					'earthy',
+					'charcoal'
+				);
 				document.body.classList.add(safeVal);
 			} catch (e) {}
 		}
@@ -82,15 +92,12 @@
 				<option value="charcoal">Charcoal</option>
 			</select>
 		</div>
-		<div class="mt-4 text-[12px] text-[var(--muted)]">
-			Current theme: <span class="font-bold text-[var(--text)]">{currentTheme}</span>
-		</div>
 	</div>
 
 	<!-- Notifications Section -->
 	<div class="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold tracking-tight text-[var(--text)]">
-			<span class="h-6 w-2 rounded-full bg-cyan-500"></span>
+			<span class="h-6 w-2 rounded-full bg-red-500"></span>
 			Notifications
 		</h2>
 
@@ -106,7 +113,7 @@
 					aria-label="Toggle system notifications"
 					title="Toggle system notifications"
 					class="relative h-8 w-14 rounded-full transition-colors {settingsState.enabled
-						? 'bg-cyan-500'
+						? 'bg-red-500'
 						: 'bg-gray-300'}"
 				>
 					<div
@@ -124,7 +131,7 @@
 			>
 				<!-- Sound Toggle -->
 				<div
-					class="rounded-2xl border border-[var(--border-2)] p-4 transition-colors hover:border-cyan-200"
+					class="rounded-2xl border border-[var(--border-2)] p-4 transition-colors hover:border-red-200"
 				>
 					<div class="mb-2 flex items-center justify-between">
 						<p class="font-bold text-[var(--text)]">Notification Sound</p>
@@ -132,7 +139,7 @@
 							type="checkbox"
 							checked={settingsState.sound}
 							onchange={(e) => updateSetting('sound', e.currentTarget.checked)}
-							class="h-5 w-5 accent-cyan-500"
+							class="h-5 w-5 accent-red-500"
 						/>
 					</div>
 					<p class="text-xs text-[var(--muted)]">Play a subtle sound for every alert</p>
@@ -140,7 +147,7 @@
 
 				<!-- Focus Mode Toggle -->
 				<div
-					class="rounded-2xl border border-[var(--border-2)] p-4 transition-colors hover:border-cyan-200"
+					class="rounded-2xl border border-[var(--border-2)] p-4 transition-colors hover:border-red-200"
 				>
 					<div class="mb-2 flex items-center justify-between">
 						<p class="font-bold text-[var(--text)]">Focus Mode</p>
@@ -148,7 +155,7 @@
 							type="checkbox"
 							checked={settingsState.focusMode}
 							onchange={(e) => updateSetting('focusMode', e.currentTarget.checked)}
-							class="h-5 w-5 accent-cyan-500"
+							class="h-5 w-5 accent-red-500"
 						/>
 					</div>
 					<p class="text-xs text-[var(--muted)]">Suppresses all but urgent deadline alerts</p>
@@ -158,7 +165,7 @@
 				<div class="rounded-2xl border border-[var(--border-2)] p-4 md:col-span-2">
 					<div class="mb-4 flex justify-between">
 						<p class="font-bold text-[var(--text)]">Focus Nudge Interval</p>
-						<span class="rounded-full bg-cyan-100 px-3 py-1 font-bold text-cyan-700"
+						<span class="rounded-full bg-red-100 px-3 py-1 font-bold text-red-700"
 							>{settingsState.focusInterval} mins</span
 						>
 					</div>
@@ -169,7 +176,7 @@
 						step="5"
 						value={settingsState.focusInterval}
 						oninput={(e) => updateSetting('focusInterval', parseInt(e.currentTarget.value))}
-						class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-[var(--surface-2)] accent-cyan-500"
+						class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-[var(--surface-2)] accent-red-500"
 					/>
 					<div class="mt-2 flex justify-between text-[10px] font-medium text-[var(--muted-2)]">
 						<span>5 MIN</span>
