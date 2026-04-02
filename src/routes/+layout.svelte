@@ -10,7 +10,7 @@
 	import SplashScreen from '$lib/components/SplashScreen.svelte';
 
 	let { children } = $props();
-	
+
 	let appLoaded = $state(false);
 
 	function localDateKey(d: Date): string {
@@ -24,7 +24,7 @@
 	onMount(() => {
 		// Initialize persistent theme store
 		initThemeStore();
-		
+
 		// Force DOM sync from within the mounted component
 		const unsubTheme = theme.subscribe((value) => {
 			if (typeof document === 'undefined') return;
@@ -88,15 +88,15 @@
 				'Daily Deadline Reminder',
 				upcomingCount > 0
 					? `You have ${upcomingCount} deadline${upcomingCount === 1 ? '' : 's'} coming up today. Open your tasks to review.`
-					: 'Review your deadlines for today. Open your tasks to check what\'s coming up.'
+					: "Review your deadlines for today. Open your tasks to check what's coming up."
 			);
 
 			await store.set('lastDeadlineReminderDate', today);
 			await store.save();
 		})();
-		
+
 		return () => {
-		    unsubTheme();
+			unsubTheme();
 		};
 	});
 </script>
@@ -107,7 +107,7 @@
 
 <svelte:body />
 
-<SplashScreen onComplete={() => appLoaded = true} />
+<SplashScreen onComplete={() => (appLoaded = true)} />
 
 <div style="display: {appLoaded ? 'contents' : 'none'}">
 	<AppShell>
