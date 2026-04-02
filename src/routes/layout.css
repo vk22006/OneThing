@@ -138,7 +138,14 @@ body.celestial-night {
 	--nav-hover-bg: rgba(233, 69, 96, 0.1);
 	--header-bg: rgba(26, 26, 46, 0.8);
 	
+	--color-red-50: #1A1A2E;
+	--color-red-100: #FAD1D8;
+	--color-red-200: #F5A3B1;
+	--color-red-400: #ED7489;
 	--color-red-500: #E94560;
+	--color-red-600: #D0304D;
+	--color-red-700: #B71C3A;
+	--color-red-800: #9E122B;
 }
 
 /* Earthy theme */
