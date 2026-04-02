@@ -2,7 +2,8 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-html, body {
+html,
+body {
 	margin: 0;
 	height: 100%;
 	overflow: hidden;
@@ -59,7 +60,135 @@ body.dark {
 }
 
 /* Apply background/text from variables (works for both themes) */
-html, body {
+html,
+body {
 	background: var(--app-bg);
 	color: var(--text);
+}
+
+/* Baroque Blue theme */
+html[data-theme='baroque-blue'],
+body.baroque-blue {
+	--app-bg: #e0f0ff;
+	--surface: #b7d3e8;
+	--surface-2: #a4c8e1;
+	--surface-3: rgba(164, 200, 225, 0.6);
+	--sidebar-bg: #b7d3e8;
+	--text: #000000;
+	--muted: #4b6f9a;
+	--muted-2: #1e3a78;
+	--border: #4b6f9a;
+	--border-2: #1e3a78;
+	--nav-hover-bg: rgba(75, 111, 154, 0.1);
+	--header-bg: rgba(224, 240, 255, 0.8);
+
+	/* Modify tailwind primary red color usage */
+	--color-red-50: #e0f0ff;
+	--color-red-100: #b7d3e8;
+	--color-red-200: #a4c8e1;
+	--color-red-400: #4b6f9a;
+	--color-red-50: #a4c8e1;
+	--color-red-100: #b7d3e8;
+	--color-red-400: #4b6f9a;
+	--color-red-500: #1e3a78;
+	--color-red-600: #162b5a;
+	--color-red-700: #0f1d3c;
+	--color-red-800: #0a1836;
+}
+
+/* Forest theme */
+html[data-theme='forest'],
+body.forest {
+	--app-bg: #F0F9F0;
+	--surface: #D1E8D1;
+	--surface-2: #A8D8B9;
+	--surface-3: rgba(168, 216, 185, 0.6);
+	--sidebar-bg: #D1E8D1;
+	--text: #2E4B2D;
+	--muted: #4B8B3B;
+	--muted-2: #2E4B2D;
+	--border: #4B8B3B;
+	--border-2: #2E4B2D;
+	--nav-hover-bg: rgba(75, 139, 59, 0.1);
+	--header-bg: rgba(240, 249, 240, 0.8);
+	
+	--color-red-50: #F0F9F0;
+	--color-red-100: #D1E8D1;
+	--color-red-200: #A8D8B9;
+	--color-red-400: #4B8B3B;
+	--color-red-500: #2E4B2D;
+	--color-red-600: #1F361E;
+	--color-red-700: #142413;
+	--color-red-800: #0a1109;
+}
+
+/* Celestial Night theme */
+html[data-theme='celestial-night'],
+body.celestial-night {
+	--app-bg: #1A1A2E;
+	--surface: #16213E;
+	--surface-2: #0F3460;
+	--surface-3: rgba(15, 52, 96, 0.6);
+	--sidebar-bg: #1A1A2E;
+	--text: #F9F9F9;
+	--muted: #E94560;
+	--muted-2: #0F3460;
+	--border: #0F3460;
+	--border-2: #16213E;
+	--nav-hover-bg: rgba(233, 69, 96, 0.1);
+	--header-bg: rgba(26, 26, 46, 0.8);
+	
+	--color-red-500: #E94560;
+}
+
+/* Earthy theme */
+html[data-theme='earthy'],
+body.earthy {
+	--app-bg: #F9F3E0;
+	--surface: #F4E1C1;
+	--surface-2: #E1C6A8;
+	--surface-3: rgba(225, 198, 168, 0.6);
+	--sidebar-bg: #F4E1C1;
+	--text: #7D5B29;
+	--muted: #C2A76D;
+	--muted-2: #7D5B29;
+	--border: #C2A76D;
+	--border-2: #C2A76D;
+	--nav-hover-bg: rgba(125, 91, 41, 0.1);
+	--header-bg: rgba(249, 243, 224, 0.8);
+	
+	--color-red-50: #F9F3E0;
+	--color-red-100: #F4E1C1;
+	--color-red-200: #E1C6A8;
+	--color-red-400: #C2A76D;
+	--color-red-500: #7D5B29;
+	--color-red-600: #62461D;
+	--color-red-700: #4B3615;
+	--color-red-800: #33230C;
+}
+
+/* Charcoal theme */
+html[data-theme='charcoal'],
+body.charcoal {
+	--app-bg: #F2F2F2;
+	--surface: #D9D9D9;
+	--surface-2: #AFAFAF;
+	--surface-3: rgba(175, 175, 175, 0.6);
+	--sidebar-bg: #D9D9D9;
+	--text: #3B3B3F;
+	--muted: #6B6B6F;
+	--muted-2: #3B3B3F;
+	--border: #6B6B6F;
+	--border-2: #6B6B6F;
+	--nav-hover-bg: rgba(59, 59, 63, 0.1);
+	--header-bg: rgba(242, 242, 242, 0.8);
+	
+	--color-red-50: #F2F2F2;
+	--color-red-100: #D9D9D9;
+	--color-red-200: #AFAFAF;
+	--color-red-400: #6B6B6F;
+	--color-red-500: #3B3B3F;
+	--color-red-600: #2E2E31;
+	--color-red-700: #212124;
+	--color-red-800: #151517;
 }
