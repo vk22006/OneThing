@@ -21,7 +21,7 @@ I struggled with:
 
 This is a personal tool first — built to match my workflow — and a learning project second.
 
-![Main screen (initial version)](assets/main_page_1.1.2.gif)
+![Main screen (initial version)](assets/main_page_1.1.3.gif)
 
 
 ## Core Features
@@ -31,9 +31,9 @@ This is a personal tool first — built to match my workflow — and a learning 
 - 📅 Deadlines per project  
 - 🧠 Project ideas + tool notes  
 - 📝 Daily progress logging  
-- 🔔 Optional daily reminder notification  
+- 🔔 Dynamic notification system (daily reminders + focus nudges)
 - 📊 Simple progress visibility over time  
-- 🎨 **Dynamic Red Theme**: High-contrast, focused visual system.
+- 🎨 **Modern Theming**: High-contrast, focused visual system with Light and Dark modes.
 
 No cloud. No accounts. No distractions.
 
@@ -43,10 +43,8 @@ No cloud. No accounts. No distractions.
 - **Frontend:** SvelteKit + Tailwind CSS
 - **Desktop wrapper:** Tauri v2 (Rust)
 - **Language:** TypeScript / Svelte / Rust
-- **Storage:** Local file storage (Tauri Store API) & localStorage
+- **Storage:** Local file storage (Tauri Store API) & IndexedDB
 - **System Integration:** Native desktop notifications
-
-> The app is intentionally built as a web-first application so it can evolve into a desktop app without a rewrite.
 
 
 ## Project Status
@@ -64,9 +62,9 @@ This project successfully met its original design goals of providing a focused, 
 - [x] Progress logging
 - [x] Deadline tracking
 - [x] Desktop notifications
-- [x] **v1.1.2: Native Splash Screen**
-- [x] **v1.1.2: Visual Identity Redesign (Red Theme)**
-- [x] Polishing + stability
+- [x] **v1.1.2: Native Splash Screen & Red Rebranding**
+- [x] **v1.1.3: Maintenance & UI Polish**
+- [x] Internal stability updates
 
 Detailed roadmap lives outside this README to keep this file concise.
 
