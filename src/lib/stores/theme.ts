@@ -57,8 +57,8 @@ theme.subscribe(applyThemeToDOM);
 export async function initThemeStore() {
 	if (typeof window === 'undefined') return;
 
-	const isTauri = '__TAURI_INTERNALS__' in window;
-
+	const isTauri = '__TAURI_INTERNALS__' in window || '__TAURI_IPC__' in window || '__TAURI__' in window;
+	
 	if (isTauri) {
 		try {
 			const store = new LazyStore('settings.json');

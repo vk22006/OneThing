@@ -131,8 +131,8 @@ body.celestial-night {
 	--surface-3: rgba(15, 52, 96, 0.6);
 	--sidebar-bg: #1A1A2E;
 	--text: #F9F9F9;
-	--muted: #E94560;
-	--muted-2: #0F3460;
+	--muted: rgba(249, 249, 249, 0.7);
+	--muted-2: rgba(249, 249, 249, 0.45);
 	--border: #0F3460;
 	--border-2: #16213E;
 	--nav-hover-bg: rgba(233, 69, 96, 0.1);

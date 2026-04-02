@@ -31,7 +31,7 @@
 			try {
 				const safeVal = (value || 'light').toLowerCase();
 				document.documentElement.setAttribute('data-theme', safeVal);
-				document.body.classList.remove('light', 'dark', 'Light', 'Dark');
+				document.body.classList.remove('light', 'dark', 'Light', 'Dark', 'baroque-blue', 'forest', 'celestial-night', 'earthy', 'charcoal');
 				document.body.classList.add(safeVal);
 			} catch (e) {}
 		});
