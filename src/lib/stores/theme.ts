@@ -1,94 +1,100 @@
 import { writable } from 'svelte/store';
-import { browser } from '$app/environment';
-import { LazyStore } from '@tauri-apps/plugin-store';
+import { settingsStore } from './settings';
 
-export type Theme = 'light' | 'dark' | 'baroque-blue' | 'forest' | 'celestial-night' | 'earthy' | 'charcoal';
+export type Theme =
+	| 'light'
+	| 'dark'
+	| 'baroque-blue'
+	| 'forest'
+	| 'celestial-night'
+	| 'earthy'
+	| 'charcoal';
+
+const VALID_THEMES: Theme[] = [
+	'light',
+	'dark',
+	'baroque-blue',
+	'forest',
+	'celestial-night',
+	'earthy',
+	'charcoal'
+];
 
 const defaultTheme: Theme = 'light';
 
-function getInitialTheme(): Theme {
-	if (typeof window === 'undefined') return defaultTheme;
-	try {
-		const stored = localStorage.getItem('theme');
-		const validThemes = ['light', 'dark', 'baroque-blue', 'forest', 'celestial-night', 'earthy', 'charcoal'];
-		if (stored && validThemes.includes(stored)) return stored as Theme;
-		const lower = stored?.toLowerCase();
-		if (lower && validThemes.includes(lower)) return lower as Theme;
-	} catch {
-		// Ignore localStorage error
-	}
-	return defaultTheme;
-}
-
-const initialTheme = getInitialTheme();
-export const theme = writable<Theme>(initialTheme);
+// Start with default — the real persisted value is loaded async in initThemeStore()
+export const theme = writable<Theme>(defaultTheme);
 
 function applyThemeToDOM(value: string) {
-	let debugText =
-		'applyThemeToDOM called with: ' + value + ' | has_doc: ' + (typeof document !== 'undefined');
-
-	if (typeof document === 'undefined') {
-		return;
-	}
-
+	if (typeof document === 'undefined') return;
 	try {
 		const safeVal = (value || 'light').toLowerCase();
 		document.documentElement.setAttribute('data-theme', safeVal);
-		document.body.classList.remove('light', 'dark', 'Light', 'Dark', 'baroque-blue', 'forest', 'celestial-night', 'earthy', 'charcoal');
+		document.body.classList.remove(...VALID_THEMES, 'Light', 'Dark');
 		document.body.classList.add(safeVal);
-		debugText += ' | success setting ' + safeVal;
 	} catch (e) {
 		console.error('Theme DOM update error', e);
-		debugText += ' | ERROR';
-	}
-
-	// Direct DOM write to debugger div
-	const debugEl = document.getElementById('tauri-debug');
-	if (debugEl) {
-		const p = document.createElement('p');
-		p.style.color = 'yellow';
-		p.innerText = 'Trace: ' + debugText;
-		debugEl.appendChild(p);
 	}
 }
 
+// Keep the DOM in sync whenever the store value changes
 theme.subscribe(applyThemeToDOM);
 
+// Track whether we've already attached the persist-subscriber to avoid duplicates
+let persistSubscribed = false;
+
+/**
+ * Must be called once from +layout.svelte onMount.
+ * Loads the persisted theme from the Tauri store (or localStorage fallback)
+ * and wires up a subscriber that persists future changes.
+ */
 export async function initThemeStore() {
 	if (typeof window === 'undefined') return;
 
-	const isTauri = '__TAURI_INTERNALS__' in window || '__TAURI_IPC__' in window || '__TAURI__' in window;
-	
+	const isTauri =
+		'__TAURI_INTERNALS__' in window || '__TAURI_IPC__' in window || '__TAURI__' in window;
+
 	if (isTauri) {
 		try {
-			const store = new LazyStore('settings.json');
-			let saved = await store.get<string>('theme');
-			if (saved) {
-				const norm = saved.toLowerCase() as Theme;
-				if (['light', 'dark', 'baroque-blue', 'forest', 'celestial-night', 'earthy', 'charcoal'].includes(norm)) {
-					theme.set(norm);
-				}
-			}
+			const store = settingsStore;
 
-			theme.subscribe((value) => {
-				try {
-					localStorage.setItem('theme', value);
-				} catch {}
-				store
-					.set('theme', value)
-					.then(() => store.save())
-					.catch(console.error);
-			});
+			// Load persisted theme; fall back to default if missing/invalid
+			const saved = await store.get<string>('theme');
+			const resolved =
+				saved && VALID_THEMES.includes(saved.toLowerCase() as Theme)
+					? (saved.toLowerCase() as Theme)
+					: defaultTheme;
+
+			// Apply if different from the current store value
+			theme.update((current) => (current !== resolved ? resolved : current));
+
+			// Attach the persist-subscriber only once per app lifetime
+			if (!persistSubscribed) {
+				persistSubscribed = true;
+				theme.subscribe((value) => {
+					store.set('theme', value).catch(console.error);
+				});
+			}
 			return;
 		} catch (e) {
-			console.error('Tauri store error', e);
+			console.error('Tauri store error, falling back to localStorage:', e);
 		}
 	}
 
-	// LocalStorage fallback
-	theme.subscribe((value) => {
-		try {
-			localStorage.setItem('theme', value);
-		} catch {}
-	});
+	// ----- localStorage fallback (browser dev mode) -----
+	try {
+		const stored = localStorage.getItem('theme');
+		if (stored && VALID_THEMES.includes(stored.toLowerCase() as Theme)) {
+			theme.set(stored.toLowerCase() as Theme);
+		}
+	} catch {}
+
+	if (!persistSubscribed) {
+		persistSubscribed = true;
+		theme.subscribe((value) => {
+			try {
+				localStorage.setItem('theme', value);
+			} catch {}
+		});
+	}
 }

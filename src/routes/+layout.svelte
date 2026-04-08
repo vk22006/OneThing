@@ -3,7 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { theme, initThemeStore } from '$lib/stores/theme';
 	import { onMount } from 'svelte';
-	import { LazyStore } from '@tauri-apps/plugin-store';
+	import { settingsStore } from '$lib/stores/settings';
 	import { notificationSettings, loadSettings } from '$lib/stores/notifications';
 	import { NotificationManager } from '$lib/notifications/notificationManager';
 	import AppShell from '$lib/layout/AppShell.svelte';
@@ -56,7 +56,7 @@
 
 			// Send at most once per calendar day (while the app is opened).
 			const today = localDateKey(new Date());
-			const store = new LazyStore('settings.json');
+			const store = settingsStore;
 			const lastSent = await store.get<string>('lastDeadlineReminderDate');
 
 			if (lastSent === today) return;
@@ -92,7 +92,6 @@
 			);
 
 			await store.set('lastDeadlineReminderDate', today);
-			await store.save();
 		})();
 
 		return () => {
