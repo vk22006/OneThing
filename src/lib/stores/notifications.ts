@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { LazyStore } from '@tauri-apps/plugin-store';
+import { settingsStore } from './settings';
 import { browser } from '$app/environment';
 
 type NotificationSettings = {
@@ -26,7 +26,7 @@ async function hydrateSettings() {
 	if (!browser || hydrated || initializing) return;
 	initializing = true;
 
-	const store = new LazyStore('settings.json');
+	const store = settingsStore;
 	const saved = await store.get<NotificationSettings>('notificationSettings');
 	if (saved) {
 		notificationSettings.set({ ...DEFAULT_SETTINGS, ...saved });
@@ -43,9 +43,8 @@ notificationSettings.subscribe(async (value) => {
 	if (!browser) return;
 	if (!hydrated) return;
 
-	const store = new LazyStore('settings.json');
+	const store = settingsStore;
 	await store.set('notificationSettings', value);
-	await store.save();
 });
 
 if (browser) {
