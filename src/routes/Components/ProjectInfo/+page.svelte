@@ -93,6 +93,29 @@
 
 		return Math.round((done / project.tasks.length) * 100);
 	}
+
+	function daysRemaining(deadlineStr: string) {
+		if (!deadlineStr) return null;
+		
+		// Expected format: DD-MM-YYYY
+		const parts = deadlineStr.split('-');
+		if (parts.length !== 3) return null;
+		
+		const day = parseInt(parts[0], 10);
+		const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
+		const year = parseInt(parts[2], 10);
+		
+		if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+
+		const deadlineDate = new Date(year, month, day);
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		deadlineDate.setHours(0, 0, 0, 0);
+		
+		const diffMs = deadlineDate.getTime() - today.getTime();
+		const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+		return diffDays;
+	}
 </script>
 
 <Header page={pageTitle} />
@@ -107,6 +130,9 @@
 				bind:value={newProject}
 				placeholder="Project Title"
 				class="block w-full rounded-xl border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-[var(--text)] placeholder-[var(--muted-2)] shadow-sm transition-all focus:border-red-500 focus:bg-[var(--surface)] focus:ring-[3px] focus:ring-red-100 focus:outline-none"
+				onkeydown={(e) => {
+					if (e.key === 'Enter') addProjDetails(newProject, newDeadline);
+				}}
 			/>
 		</div>
 		<div class="relative w-48">
@@ -114,6 +140,9 @@
 				bind:value={newDeadline}
 				placeholder="Deadline (DD-MM-YYYY)"
 				class="block w-full rounded-xl border border-[var(--border)] bg-[var(--surface-2)] px-4 py-3 text-sm text-[var(--text)] placeholder-[var(--muted-2)] shadow-sm transition-all focus:border-red-500 focus:bg-[var(--surface)] focus:ring-[3px] focus:ring-red-100 focus:outline-none"
+				onkeydown={(e) => {
+					if (e.key === 'Enter') addProjDetails(newProject, newDeadline);
+				}}
 			/>
 		</div>
 		<button
@@ -154,6 +183,15 @@
 							>
 							Deadline: <span class="text-[var(--text)]">{project.deadline || 'No deadline'}</span>
 						</div>
+						{#if project.deadline}
+							{@const remaining = daysRemaining(project.deadline)}
+							{#if remaining !== null}
+								<div class="mt-1 flex items-center gap-1.5 text-[13px] font-medium text-[var(--muted)]">
+									<svg class="h-4 w-4 text-[var(--muted-2)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+									Days Remaining: <span class="font-bold {remaining < 0 ? 'text-red-500' : remaining <= 3 ? 'text-amber-500' : 'text-[var(--text)]'}">{remaining < 0 ? 'Overdue' : remaining}</span>
+								</div>
+							{/if}
+						{/if}
 					</div>
 
 					<button
