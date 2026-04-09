@@ -21,7 +21,7 @@ I struggled with:
 
 This is a personal tool first — built to match my workflow — and a learning project second.
 
-![Main screen (initial version)](assets/main_page_1.1.3.gif)
+![Main screen (initial version)](assets/main_page_1.1.4.gif)
 
 
 ## Core Features
@@ -68,6 +68,8 @@ This project successfully met its original design goals of providing a focused, 
 - [x] **v1.1.2: Native Splash Screen**
 - [x] **v1.1.2: Visual Identity Redesign (Red Theme)**
 - [x] **v1.1.3: New Themes (Forest, Celestial Night, Earthy, Charcoal)**
+- [x] **v1.1.4: Theme Persistence & Modern UI Refresh**
+- [x] **v1.2.0: Keyboard-First Workflow**
 - [x] Polishing + stability
 
 
@@ -90,7 +92,6 @@ This project successfully met its original design goals of providing a focused, 
 
 ## Future Improvements
 
-- Keyboard-first workflow
 - Cross-platform desktop builds
 
 
