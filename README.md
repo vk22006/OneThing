@@ -21,7 +21,7 @@ I struggled with:
 
 This is a personal tool first — built to match my workflow — and a learning project second.
 
-![Main screen (initial version)](assets/main_page_1.1.4.gif)
+![Main screen (initial version)](assets/main_page_1.2.0.gif)
 
 
 ## Core Features
