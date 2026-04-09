@@ -73,7 +73,7 @@
 
 			<!-- Version text -->
 			<div class="mt-[10px] text-[14px] font-normal tracking-normal text-[#9ca3af]">
-				Version 1.1.4
+				Version 1.2.0
 			</div>
 		</div>
 	</div>
