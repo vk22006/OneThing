@@ -5,6 +5,7 @@
 	import { notificationSettings } from '$lib/stores/notifications';
 	import { NotificationManager } from '$lib/notifications/notificationManager';
 	import { focusScheduler } from '$lib/notifications/scheduler';
+	import { focusTaskInput } from '$lib/stores/shortcuts';
 
 	let pageTitle = $state('Daily TODO List');
 
@@ -19,6 +20,56 @@
 	let users = $state<User[]>([]);
 	let newTask = $state('');
 	let deadlineTime = $state('');
+
+	// Keyboard navigation state
+	let activeIndex = $state<number>(-1);
+	let taskInputEl = $state<HTMLInputElement | null>(null);
+
+	// Listen for the global "focus new task input" signal
+	const unsubFocus = focusTaskInput.subscribe((should) => {
+		if (should) {
+			taskInputEl?.focus();
+			focusTaskInput.set(false);
+		}
+	});
+
+	function handleListKey(e: KeyboardEvent) {
+		const target = e.target as HTMLElement;
+		const isTyping =
+			target.tagName === 'INPUT' ||
+			target.tagName === 'TEXTAREA' ||
+			target.isContentEditable;
+
+		// Escape: blur the currently focused input
+		if (e.key === 'Escape' && isTyping) {
+			(target as HTMLInputElement).blur();
+			return;
+		}
+
+		if (isTyping || users.length === 0) return;
+
+		if (e.key === 'ArrowDown' || e.key === 'j') {
+			e.preventDefault();
+			activeIndex = Math.min(activeIndex + 1, users.length - 1);
+			return;
+		}
+		if (e.key === 'ArrowUp' || e.key === 'k') {
+			e.preventDefault();
+			activeIndex = Math.max(activeIndex - 1, 0);
+			return;
+		}
+		if (e.key === ' ' && activeIndex >= 0) {
+			e.preventDefault();
+			toggle(users[activeIndex].id);
+			return;
+		}
+		if ((e.key === 'Delete' || e.key === 'Backspace') && activeIndex >= 0) {
+			e.preventDefault();
+			removeTask(users[activeIndex].id);
+			activeIndex = Math.min(activeIndex, users.length - 2);
+			return;
+		}
+	}
 
 	onMount(() => {
 		const stored = localStorage.getItem('tasks');
@@ -36,7 +87,10 @@
 			}
 		});
 
-		return () => unsubscribe();
+		return () => {
+			unsubscribe();
+			unsubFocus();
+		};
 	});
 
 	$effect(() => {
@@ -99,6 +153,8 @@
 	);
 </script>
 
+<svelte:window onkeydown={handleListKey} />
+
 <Header page={pageTitle} />
 
 <div class="mx-auto w-full max-w-4xl px-8 py-8">
@@ -141,10 +197,11 @@
 		</div>
 		<input
 			bind:value={newTask}
+			bind:this={taskInputEl}
 			onkeydown={(e) => {
 				if (e.key === 'Enter') addTask(newTask);
 			}}
-			placeholder="Add a new task..."
+			placeholder="Add a new task... (Ctrl+N or /)"
 			class="flex-1 bg-transparent py-3 text-sm placeholder-gray-400 focus:outline-none"
 		/>
 
@@ -201,11 +258,18 @@
 				<p class="mt-1.5 text-[13px] text-[var(--muted)]">Add a new task above to get started.</p>
 			</div>
 		{:else}
-			{#each users as user (user.id)}
+			{#each users as user, i (user.id)}
 				<div
 					in:fly={{ y: 15, duration: 250 }}
 					out:fade={{ duration: 150 }}
-					class="group flex items-center gap-3.5 rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-3.5 shadow-sm transition-all duration-200 hover:shadow-md"
+					role="button"
+					tabindex="0"
+					onclick={() => (activeIndex = i)}
+					onkeydown={(e) => { if (e.key === 'Enter') { activeIndex = i; toggle(user.id); } }}
+					class="group flex items-center gap-3.5 rounded-[14px] border p-3.5 shadow-sm transition-all duration-200 hover:shadow-md
+						{activeIndex === i
+							? 'border-red-400 bg-[var(--surface)] ring-2 ring-red-200'
+							: 'border-[var(--border)] bg-[var(--surface)]'}"
 				>
 					<!-- Checkbox Toggle -->
 					<button
