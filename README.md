@@ -1,4 +1,4 @@
-![Logo for OneThing](assets/header-dark.png) 
+![Logo for OneThing](assets/header-dark.png)
 
 ![Release](https://img.shields.io/github/v/release/vk22006/OneThing)
 ![GitHub top language](https://img.shields.io/github/languages/top/vk22006/OneThing)
@@ -21,8 +21,7 @@ I struggled with:
 
 This is a personal tool first — built to match my workflow — and a learning project second.
 
-![Main screen (initial version)](assets/main_page_1.2.0.gif)
-
+![Main screen (initial version)](assets/main_page_1.2.1.gif)
 
 ## Core Features
 
@@ -38,7 +37,6 @@ This is a personal tool first — built to match my workflow — and a learning 
 
 No cloud. No accounts. No distractions.
 
-
 ## Tech Stack
 
 - **Frontend:** SvelteKit + Tailwind CSS
@@ -48,7 +46,6 @@ No cloud. No accounts. No distractions.
 - **System Integration:** Native desktop notifications
 
 > The app is intentionally built as a web-first application so it can evolve into a desktop app without a rewrite.
-
 
 ## Project Status
 
@@ -70,8 +67,8 @@ This project successfully met its original design goals of providing a focused, 
 - [x] **v1.1.3: New Themes (Forest, Celestial Night, Earthy, Charcoal)**
 - [x] **v1.1.4: Theme Persistence & Modern UI Refresh**
 - [x] **v1.2.0: Keyboard-First Workflow**
+- [x] **v1.2.1: Project Prioritization**
 - [x] Polishing + stability
-
 
 ## Design Philosophy
 
@@ -81,7 +78,6 @@ This project successfully met its original design goals of providing a focused, 
 - Local data ownership
 - Built for long-term personal use, not virality
 
-
 ## What This Project Demonstrates
 
 - Ability to design software around real personal problems
@@ -89,11 +85,9 @@ This project successfully met its original design goals of providing a focused, 
 - Frontend state management
 - Desktop app architecture with web + native integration
 
-
 ## Future Improvements
 
 - Cross-platform desktop builds
-
 
 ## License
 

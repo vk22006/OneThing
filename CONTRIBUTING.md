@@ -48,7 +48,7 @@ Please:
 
 - Node.js
 - npm or pnpm
-- Basic knowledge of Svelte
+- Basic knowledge of Svelte and Tauri(Rust)
 
 ### Running the Project
 
