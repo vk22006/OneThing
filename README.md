@@ -1,6 +1,7 @@
 ![Logo for OneThing](assets/header-dark.png)
 
 ![Release](https://img.shields.io/github/v/release/vk22006/OneThing)
+![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue)
 ![GitHub top language](https://img.shields.io/github/languages/top/vk22006/OneThing)
 [![License](https://img.shields.io/github/license/vk22006/OneThing)](LICENSE)
 
@@ -69,6 +70,7 @@ This project successfully met its original design goals of providing a focused, 
 - [x] **v1.2.0: Keyboard-First Workflow**
 - [x] **v1.2.1: Project Prioritization**
 - [x] Polishing + stability
+- [x] **Cross-platform builds (Windows, macOS, Linux)**
 
 ## Design Philosophy
 
@@ -85,9 +87,11 @@ This project successfully met its original design goals of providing a focused, 
 - Frontend state management
 - Desktop app architecture with web + native integration
 
-## Future Improvements
+## Download
 
-- Cross-platform desktop builds
+Pre-built binaries are available on the [Releases page](https://github.com/vk22006/OneThing/releases/latest).
+
+> **Note:** For macOS users, you may need to right-click → Open the first time due to Gatekeeper.
 
 ## License
 
