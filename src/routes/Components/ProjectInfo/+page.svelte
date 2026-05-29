@@ -25,10 +25,22 @@
 	let newProject = $state('');
 	let newDeadline = $state('');
 
+	// --- Focus state ---
+	// The ID of the project the user is currently focused on (first-created by default)
+	let focusedProjectId = $state<number | null>(null);
+
+	// Switch-focus dialog state
+	let switchDialogVisible = $state(false);
+	let pendingSwitchProjectId = $state<number | null>(null);
+
 	onMount(() => {
 		const stored = localStorage.getItem('project_info');
 		if (stored) {
 			projects.push(...JSON.parse(stored));
+		}
+		const storedFocus = localStorage.getItem('focused_project_id');
+		if (storedFocus) {
+			focusedProjectId = JSON.parse(storedFocus);
 		}
 	});
 
@@ -36,25 +48,98 @@
 		localStorage.setItem('project_info', JSON.stringify(projects));
 	});
 
+	$effect(() => {
+		if (focusedProjectId !== null) {
+			localStorage.setItem('focused_project_id', JSON.stringify(focusedProjectId));
+		} else {
+			localStorage.removeItem('focused_project_id');
+		}
+	});
+
+	// Derived: is the multi-project focus banner needed?
+	let showFocusBanner = $derived(projects.length > 1);
+
+	// Derived: the currently focused project object
+	let focusedProject = $derived(projects.find((p) => p.id === focusedProjectId) ?? null);
+
+	// Returns true if a project card should be interactive (not disabled)
+	function isActive(projectId: number) {
+		if (projects.length <= 1) return true;
+		return projectId === focusedProjectId;
+	}
+
+	// Parse a DD-MM-YYYY string to a Date (midnight local)
+	function parseDeadline(deadlineStr: string): Date | null {
+		if (!deadlineStr) return null;
+		const parts = deadlineStr.split('-');
+		if (parts.length !== 3) return null;
+		const day = parseInt(parts[0], 10);
+		const month = parseInt(parts[1], 10) - 1;
+		const year = parseInt(parts[2], 10);
+		if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+		const d = new Date(year, month, day);
+		d.setHours(0, 0, 0, 0);
+		return d;
+	}
+
 	function addProjDetails(title: string, deadline: string) {
 		if (!title.trim()) return;
 
+		const newId = Date.now();
+
+		// Check if the new project has a shorter deadline than the focused one
+		let shouldAskSwitch = false;
+		if (focusedProjectId !== null && deadline && focusedProject?.deadline) {
+			const newDate = parseDeadline(deadline);
+			const focusedDate = parseDeadline(focusedProject.deadline);
+			if (newDate && focusedDate && newDate < focusedDate) {
+				shouldAskSwitch = true;
+			}
+		}
+
 		projects.push({
-			id: Date.now(),
+			id: newId,
 			title,
 			deadline,
 			tasks: [],
 			notes: ''
 		});
 
+		// Set focus to first project if none yet
+		if (focusedProjectId === null) {
+			focusedProjectId = newId;
+		}
+
 		newProject = '';
 		newDeadline = '';
+
+		if (shouldAskSwitch) {
+			pendingSwitchProjectId = newId;
+			switchDialogVisible = true;
+		}
+	}
+
+	function confirmSwitch() {
+		if (pendingSwitchProjectId !== null) {
+			focusedProjectId = pendingSwitchProjectId;
+		}
+		switchDialogVisible = false;
+		pendingSwitchProjectId = null;
+	}
+
+	function declineSwitch() {
+		switchDialogVisible = false;
+		pendingSwitchProjectId = null;
 	}
 
 	function removeProject(id: number) {
 		const index = projects.findIndex((u) => u.id === id);
 		if (index !== -1) {
 			projects.splice(index, 1);
+		}
+		// If the deleted project was the focused one, refocus on the first remaining
+		if (focusedProjectId === id) {
+			focusedProjectId = projects.length > 0 ? projects[0].id : null;
 		}
 	}
 
@@ -96,22 +181,13 @@
 
 	function daysRemaining(deadlineStr: string) {
 		if (!deadlineStr) return null;
-		
-		// Expected format: DD-MM-YYYY
-		const parts = deadlineStr.split('-');
-		if (parts.length !== 3) return null;
-		
-		const day = parseInt(parts[0], 10);
-		const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
-		const year = parseInt(parts[2], 10);
-		
-		if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
 
-		const deadlineDate = new Date(year, month, day);
+		const deadlineDate = parseDeadline(deadlineStr);
+		if (!deadlineDate) return null;
+
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
-		deadlineDate.setHours(0, 0, 0, 0);
-		
+
 		const diffMs = deadlineDate.getTime() - today.getTime();
 		const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 		return diffDays;
@@ -121,6 +197,21 @@
 <Header page={pageTitle} />
 
 <div class="mx-auto w-full max-w-5xl px-8 py-8">
+	<!-- Focus Banner -->
+	{#if showFocusBanner}
+		<div
+			in:fade={{ duration: 250 }}
+			class="focus-banner mb-6 flex items-center justify-center gap-2 rounded-[12px] border border-amber-200 bg-amber-50 px-6 py-3 text-center shadow-sm"
+		>
+			<svg class="h-5 w-5 flex-shrink-0 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+			</svg>
+			<span class="text-[14px] font-semibold text-amber-700">
+				Let's focus on One Project at a time!
+			</span>
+		</div>
+	{/if}
+
 	<!-- Add Project Form -->
 	<div
 		class="mb-8 flex gap-3 rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm"
@@ -156,10 +247,18 @@
 	<!-- Project list -->
 	<div class="flex flex-col gap-6">
 		{#each projects as project (project.id)}
+			{@const active = isActive(project.id)}
 			<div
 				in:fly={{ y: 20, duration: 300 }}
-				class="overflow-hidden rounded-[14px] border border-[var(--border)] bg-[var(--surface)] shadow-sm"
+				class="project-card overflow-hidden rounded-[14px] border border-[var(--border)] bg-[var(--surface)] shadow-sm transition-all duration-300 {active
+					? ''
+					: 'disabled-card'}"
 			>
+				<!-- Disabled overlay -->
+				{#if !active}
+					<div class="disabled-overlay" aria-hidden="true"></div>
+				{/if}
+
 				<!-- Project Header -->
 				<div
 					class="flex items-start justify-between border-b border-[var(--border-2)] bg-[var(--surface-3)] px-6 py-5"
@@ -194,21 +293,33 @@
 						{/if}
 					</div>
 
-					<button
-						onclick={() => removeProject(project.id)}
-						class="cursor-pointer rounded-lg p-2 text-[var(--muted-2)] transition-colors hover:bg-red-50 hover:text-red-500"
-						title="Delete Project"
-						aria-label="Delete Project"
-					>
-						<svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-							><path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-							></path></svg
+					<div class="flex items-center gap-2">
+						<!-- "Switch focus here" button for inactive projects -->
+						{#if !active}
+							<button
+								onclick={() => { focusedProjectId = project.id; }}
+								class="rounded-lg px-3 py-1.5 text-[12px] font-semibold text-amber-600 border border-amber-300 bg-amber-50 transition-colors hover:bg-amber-100 hover:border-amber-400"
+								title="Switch focus to this project"
+							>
+								Switch Focus
+							</button>
+						{/if}
+						<button
+							onclick={() => removeProject(project.id)}
+							class="cursor-pointer rounded-lg p-2 text-[var(--muted-2)] transition-colors hover:bg-red-50 hover:text-red-500"
+							title="Delete Project"
+							aria-label="Delete Project"
 						>
-					</button>
+							<svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+								><path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+								></path></svg
+							>
+						</button>
+					</div>
 				</div>
 
 				<div class="p-6">
@@ -250,6 +361,7 @@
 										? 'border-red-600 bg-red-600'
 										: 'border-[var(--border)] hover:border-red-500'}"
 									aria-label="Toggle task status"
+									disabled={!active}
 								>
 									{#if task.status === 'DONE'}
 										<svg
@@ -277,6 +389,7 @@
 									onclick={() => deleteTask(project.id, task.id)}
 									class="flex-shrink-0 rounded-[6px] p-1.5 text-[var(--muted-2)] opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-red-500 focus:opacity-100"
 									aria-label="Delete task"
+									disabled={!active}
 								>
 									<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
 										><path
@@ -308,7 +421,8 @@
 							</div>
 							<input
 								placeholder="Add a new task..."
-								class="w-full rounded-[10px] border border-[var(--border)] bg-[var(--surface)] py-2.5 pr-4 pl-10 text-[14px] text-[var(--text)] placeholder-[var(--muted-2)] shadow-sm transition-all focus:border-red-500 focus:ring-[3px] focus:ring-red-100 focus:outline-none"
+								class="w-full rounded-[10px] border border-[var(--border)] bg-[var(--surface)] py-2.5 pr-4 pl-10 text-[14px] text-[var(--text)] placeholder-[var(--muted-2)] shadow-sm transition-all focus:border-red-500 focus:ring-[3px] focus:ring-red-100 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+								disabled={!active}
 								onkeydown={(e) => {
 									if (e.key === 'Enter') {
 										addTask(project.id, (e.target as HTMLInputElement).value);
@@ -341,7 +455,8 @@
 						<textarea
 							bind:value={project.notes}
 							placeholder="Add project notes, links, or details here..."
-							class="min-h-[100px] w-full resize-none rounded-[10px] border border-[var(--border-2)] bg-[var(--surface-3)] px-3.5 py-3 text-[13.5px] text-[var(--text)] placeholder-[var(--muted-2)] transition-all focus:border-red-200 focus:bg-[var(--surface)] focus:ring-[3px] focus:ring-red-100 focus:outline-none"
+							class="min-h-[100px] w-full resize-none rounded-[10px] border border-[var(--border-2)] bg-[var(--surface-3)] px-3.5 py-3 text-[13.5px] text-[var(--text)] placeholder-[var(--muted-2)] transition-all focus:border-red-200 focus:bg-[var(--surface)] focus:ring-[3px] focus:ring-red-100 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+							disabled={!active}
 						></textarea>
 					</div>
 				</div>
@@ -372,3 +487,93 @@
 		{/if}
 	</div>
 </div>
+
+<!-- Switch Focus Dialog -->
+{#if switchDialogVisible}
+	<div
+		in:fade={{ duration: 200 }}
+		out:fade={{ duration: 150 }}
+		class="dialog-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
+		role="dialog"
+		aria-modal="true"
+		aria-labelledby="switch-dialog-title"
+	>
+		<div
+			in:fly={{ y: 16, duration: 250 }}
+			class="dialog-panel w-full max-w-sm rounded-[16px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl"
+		>
+			<div class="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
+				<svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+				</svg>
+			</div>
+			<h2 id="switch-dialog-title" class="mb-2 text-[16px] font-bold text-[var(--text)]">
+				Switch Focus?
+			</h2>
+			<p class="mb-6 text-[13.5px] leading-relaxed text-[var(--muted)]">
+				Your new project has a <span class="font-semibold text-amber-600">shorter deadline</span> than your current focus project. Do you want to switch your focus to the new project?
+			</p>
+			<div class="flex gap-3">
+				<button
+					onclick={confirmSwitch}
+					class="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-[13.5px] font-semibold text-white shadow-sm transition-colors hover:bg-red-700 active:bg-red-800"
+				>
+					Yes, Switch Focus
+				</button>
+				<button
+					onclick={declineSwitch}
+					class="flex-1 rounded-xl border border-[var(--border)] bg-[var(--surface-2)] px-4 py-2.5 text-[13.5px] font-semibold text-[var(--text)] transition-colors hover:bg-[var(--surface-3)]"
+				>
+					Keep Current
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
+<style>
+	.project-card {
+		position: relative;
+	}
+
+	.disabled-card {
+		opacity: 0.55;
+		filter: grayscale(0.3);
+	}
+
+	.disabled-overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 10;
+		border-radius: 14px;
+		/* Invisible overlay to block pointer events on the card body,
+		   but the header buttons (Switch Focus / Delete) sit above it via their own z-index */
+		pointer-events: none;
+	}
+
+	/* Make the task/notes inputs truly non-interactive when disabled */
+	.disabled-card :global(input:not([type='button']):not([type='submit'])),
+	.disabled-card :global(textarea) {
+		pointer-events: none;
+	}
+
+	/* Keep the header action buttons (Switch Focus, Delete) always clickable */
+	.disabled-card :global(.project-header-actions) {
+		position: relative;
+		z-index: 20;
+	}
+
+	.dialog-backdrop {
+		background: rgba(0, 0, 0, 0.45);
+		backdrop-filter: blur(4px);
+	}
+
+	.focus-banner {
+		animation: pulse-border 2s ease-in-out infinite;
+	}
+
+	@keyframes pulse-border {
+		0%, 100% { border-color: rgb(253 230 138); }
+		50% { border-color: rgb(251 191 36); }
+	}
+</style>
