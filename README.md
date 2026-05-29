@@ -14,27 +14,27 @@
 I struggled with:
 
 - Starting multiple projects but not finishing them
-- Context switching between tools (Notion, notes, TODO apps)
+- Context switching between tools (Productivity and TODO apps)
 - Losing track of progress over time
 
 **OneThing** exists to solve a single problem:  
 👉 **focus on one project at a time and make visible progress every day.**
 
-This is a personal tool first — built to match my workflow — and a learning project second.
+This is a personal tool first, built to match my workflow. It also serves as a learning project to enhance my software engineering skills.
 
 ![Main screen (initial version)](assets/main_page_1.2.1.gif)
 
 ## Core Features
 
-- 🖥️ **Native Desktop Experience**: Advanced window management with a custom splash screen.
-- ✅ Project-based TODO list  
-- 📅 Deadlines per project  
-- 🧠 Project ideas + tool notes  
-- 📝 Daily progress logging  
-- 🔔 Optional daily reminder notification  
-- 📊 Simple progress visibility over time  
-- 🎨 **Customizable Themes**: Choose from Light, Dark, Baroque Blue, Forest, Celestial Night, Earthy, and Charcoal.
-- 🎨 **Dynamic Design**: High-contrast, focused visual system.
+- **Native Desktop Experience**: Advanced window management with a custom splash screen.
+- Project-based TODO list  
+- Deadlines per project  
+- Project ideas + tool notes  
+- Daily progress logging  
+- Optional daily reminder notification  
+- Simple progress visibility over time  
+- **Customizable Themes**: Choose from Light, Dark, Baroque Blue, Forest, Celestial Night, Earthy, and Charcoal.
+- **Dynamic Design**: High-contrast, focused visual system.
 
 No cloud. No accounts. No distractions.
 
