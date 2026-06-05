@@ -1,7 +1,7 @@
 {
 	"$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
 	"productName": "OneThing",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"identifier": "com.kishore.onething",
 	"build": {
 		"frontendDist": "../build",
@@ -23,6 +23,11 @@
 		],
 		"security": {
 			"csp": null
+		},
+		"trayIcon": {
+			"id": "main-tray",
+			"iconPath": "icons/icon.png",
+			"tooltip": "OneThing"
 		}
 	},
 	"bundle": {
