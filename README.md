@@ -27,6 +27,7 @@ This is a personal tool first, built to match my workflow. It also serves as a l
 ## Core Features
 
 - **Native Desktop Experience**: Advanced window management with a custom splash screen.
+- **System Tray Integration**: App runs in the background to ensure you never miss a deadline reminder.
 - Project-based TODO list  
 - Deadlines per project  
 - Project ideas + tool notes  
@@ -69,6 +70,7 @@ This project successfully met its original design goals of providing a focused, 
 - [x] **v1.1.4: Theme Persistence & Modern UI Refresh**
 - [x] **v1.2.0: Keyboard-First Workflow**
 - [x] **v1.2.1: Project Prioritization**
+- [x] **v1.2.2: Background Notifications & System Tray**
 - [x] Polishing + stability
 - [x] **Cross-platform builds (Windows, macOS, Linux)**
 
