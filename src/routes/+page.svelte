@@ -142,6 +142,8 @@
 	function removeTask(id: number) {
 		const index = users.findIndex((u) => u.id === id);
 		if (index !== -1) {
+			// Cancel any pending notification for this task
+			NotificationManager.cancel(id.toString());
 			users.splice(index, 1);
 		}
 	}
