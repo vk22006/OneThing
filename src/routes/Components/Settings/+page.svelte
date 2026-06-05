@@ -4,6 +4,9 @@
 	import { notificationSettings } from '$lib/stores/notifications';
 	import { onMount } from 'svelte';
 	import { loadSettings } from '$lib/stores/notifications';
+	import { NotificationManager } from '$lib/notifications/notificationManager';
+	import { invoke } from '@tauri-apps/api/core';
+	import { settingsStore } from '$lib/stores/settings';
 
 	let pageTitle = $state('Settings');
 	type SettingsState = {
@@ -20,6 +23,8 @@
 		focusMode: false,
 		focusInterval: 25
 	});
+	let dailyReminderTime = $state('09:00');
+	let autoStartEnabled = $state(false);
 
 	onMount(() => {
 		const unsubTheme = theme.subscribe((value) => {
@@ -30,6 +35,21 @@
 		});
 
 		loadSettings();
+
+		// Load daily reminder time from store
+		void (async () => {
+			const store = settingsStore;
+			const saved = await store.get<string>('dailyReminderTime');
+			if (saved) dailyReminderTime = saved;
+
+			// Load autostart state
+			try {
+				const enabled = await invoke<boolean>('plugin:autostart|is_enabled');
+				autoStartEnabled = enabled;
+			} catch {
+				// Autostart plugin may not be available on all platforms
+			}
+		})();
 
 		return () => {
 			unsubTheme();
@@ -66,6 +86,28 @@
 		settingsState = { ...settingsState, [key]: value };
 		notificationSettings.set(settingsState);
 	}
+
+	async function updateDailyReminderTime(time: string) {
+		dailyReminderTime = time;
+		// Save to both the Svelte store and the Rust backend
+		const store = settingsStore;
+		await store.set('dailyReminderTime', time);
+		await NotificationManager.setDailyReminderTime(time);
+	}
+
+	async function toggleAutoStart() {
+		try {
+			if (autoStartEnabled) {
+				await invoke('plugin:autostart|disable');
+				autoStartEnabled = false;
+			} else {
+				await invoke('plugin:autostart|enable');
+				autoStartEnabled = true;
+			}
+		} catch {
+			// Handle gracefully
+		}
+	}
 </script>
 
 <Header page={pageTitle} />
@@ -95,7 +137,7 @@
 	</div>
 
 	<!-- Notifications Section -->
-	<div class="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm">
+	<div class="mb-8 rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm">
 		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold tracking-tight text-[var(--text)]">
 			<span class="h-6 w-2 rounded-full bg-red-500"></span>
 			Notifications
@@ -161,6 +203,42 @@
 					<p class="text-xs text-[var(--muted)]">Suppresses all but urgent deadline alerts</p>
 				</div>
 
+				<!-- Daily Reminder Time -->
+				<div
+					class="rounded-2xl border border-[var(--border-2)] p-4 transition-colors hover:border-red-200"
+				>
+					<div class="mb-2 flex items-center justify-between">
+						<p class="font-bold text-[var(--text)]">Daily Reminder Time</p>
+						<input
+							type="time"
+							value={dailyReminderTime}
+							onchange={(e) => updateDailyReminderTime(e.currentTarget.value)}
+							class="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-sm font-bold text-[var(--text)] focus:border-red-500 focus:ring-[2px] focus:ring-red-100 focus:outline-none"
+						/>
+					</div>
+					<p class="text-xs text-[var(--muted)]">
+						Daily digest notification with your upcoming deadlines
+					</p>
+				</div>
+
+				<!-- Start at Login -->
+				<div
+					class="rounded-2xl border border-[var(--border-2)] p-4 transition-colors hover:border-red-200"
+				>
+					<div class="mb-2 flex items-center justify-between">
+						<p class="font-bold text-[var(--text)]">Start at Login</p>
+						<input
+							type="checkbox"
+							checked={autoStartEnabled}
+							onchange={() => toggleAutoStart()}
+							class="h-5 w-5 accent-red-500"
+						/>
+					</div>
+					<p class="text-xs text-[var(--muted)]">
+						Launch OneThing when you log in so background reminders always work
+					</p>
+				</div>
+
 				<!-- Interval Slider -->
 				<div class="rounded-2xl border border-[var(--border-2)] p-4 md:col-span-2">
 					<div class="mb-4 flex justify-between">
@@ -183,6 +261,30 @@
 						<span>30 MIN</span>
 						<span>60 MIN</span>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Background Behavior Section -->
+	<div class="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm">
+		<h2 class="mb-6 flex items-center gap-2 text-xl font-bold tracking-tight text-[var(--text)]">
+			<span class="h-6 w-2 rounded-full bg-red-500"></span>
+			Background Behavior
+		</h2>
+
+		<div class="rounded-2xl bg-[var(--surface-2)] p-4">
+			<div class="flex items-start gap-3">
+				<div class="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
+					<svg class="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+				</div>
+				<div>
+					<p class="font-bold text-[var(--text)]">Closing minimizes to tray</p>
+					<p class="mt-1 text-sm leading-relaxed text-[var(--muted)]">
+						When you close the window, OneThing keeps running in the system tray so your notifications still fire on time. Right-click the tray icon to fully quit the app.
+					</p>
 				</div>
 			</div>
 		</div>
