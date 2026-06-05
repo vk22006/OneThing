@@ -51,4 +51,14 @@ export class NotificationManager {
 			notificationType: type
 		});
 	}
+
+	static async cancel(id: string): Promise<void> {
+		if (!browser) return;
+		await invoke('cancel_notification', { id });
+	}
+
+	static async setDailyReminderTime(time: string): Promise<void> {
+		if (!browser) return;
+		await invoke('set_daily_reminder_time', { time });
+	}
 }
