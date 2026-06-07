@@ -2,9 +2,9 @@
 	let title = 'OneThing';
 
 	const navItems = [
-		{ name: 'Tasks', href: '/', shortcut: '⌥1' },
+		{ name: 'Progress', href: '/Components/Progress', shortcut: '⌥1' },
 		{ name: 'Project Info', href: '/Components/ProjectInfo', shortcut: '⌥2' },
-		{ name: 'Progress', href: '/Components/Progress', shortcut: '⌥3' },
+		{ name: 'Tasks', href: '/', shortcut: '⌥3' },
 		{ name: 'Settings', href: '/Components/Settings', shortcut: '⌥4' }
 	];
 
