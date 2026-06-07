@@ -14,9 +14,9 @@
 	let appLoaded = $state(false);
 
 	const NAV_ROUTES = [
-		'/',
-		'/Components/ProjectInfo',
 		'/Components/Progress',
+		'/Components/ProjectInfo',
+		'/',
 		'/Components/Settings'
 	];
 
@@ -63,6 +63,11 @@
 	onMount(() => {
 		// Initialize persistent theme store
 		initThemeStore();
+
+		// Navigate to Progress tab on initial app load
+		if (window.location.pathname === '/') {
+			goto('/Components/Progress', { replaceState: true });
+		}
 
 		// Force DOM sync from within the mounted component
 		const unsubTheme = theme.subscribe((value) => {
