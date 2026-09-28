@@ -71,6 +71,7 @@ This project successfully met its original design goals of providing a focused, 
 - [x] **v1.2.0: Keyboard-First Workflow**
 - [x] **v1.2.1: Project Prioritization**
 - [x] **v1.2.2: Background Notifications & System Tray**
+- [x] **v1.3.0: Component Prioritization & Progress-First UI**
 - [x] Polishing + stability
 - [x] **Cross-platform builds (Windows, macOS, Linux)**
 
