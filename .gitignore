@@ -32,3 +32,6 @@ src-tauri/gen/schemas
 
 # Logs
 *.log
+
+# Misc
+.sf/
